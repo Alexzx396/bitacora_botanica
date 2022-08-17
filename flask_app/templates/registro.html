@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitacora_botanica</title>
+    <link width="40" height="40"  rel="shortcut icon" href="../static/logo/logo_small_icon_only_inverted.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='css/style.css') }}">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <a href="/">
+            <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
+        </a>
+
+    </nav>
+    <br><br>
+    </div><br><br>
+
+    <div class="container-fluid w-75 rounded-5 shadow">
+        <div class="row">
+            <div class="col bg d-none d-lg-block p-0">
+                <img src="../static/logo/img_2.jpg"  class="w-100 h-100" alt="img-registro">
+            </div>
+
+            <div class="col bg-col px-5">
+                <div class="text-center mt-3">
+                    <a href="/">
+                        <img src="../static/logo/logo_small_icon_only.png" width="100px" alt="img-logo">
+                    </a>
+                </div>
+                <h2 class="fw-bold text-center">Regístrate</h2>
+
+                <!-- Registro -->
+                <form action="/register" method="POST">
+                    {% with messages = get_flashed_messages(category_filter=['register']) %}
+                        {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>WHUAU!!!</strong>
+                                {% for message in messages %}
+                                <p>{{message}}</p>
+                                {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Nombre</label>
+                        <input type="text" name="first_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Apellido</label>
+                        <input type="text" name="last_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="text" name="email" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm" class="form-label">Confirmar contraseña</label>
+                        <input type="password" name="confirm" class="form-control">
+                    </div>
+                    <div class="d-grid">
+                        <input type="submit" value="Crear Cuenta" class="btn btn-primary">
+                    </div>
+                    <div class="my-3">
+                        <span>¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a> </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br>
+    <div>
+
+
+
+
+
+
+
+
+
+        <footer >
+            <ul class="nav justify-content-center border-bottom bg-light pb-4 mb-0">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+            <p class="text-center text-muted"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
+        </footer>
+    </div>
+</body>
+</html>

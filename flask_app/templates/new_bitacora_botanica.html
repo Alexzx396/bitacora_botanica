@@ -14,12 +14,15 @@
     <nav class="navbar navbar-light bg-light">
         <h3  class="text-center"> <a class="navbar-brand" href="#">
             <img src="../../static/logo/logo_small_icon_only_inverted.png" width="40" height="40" alt="">
-          </a> Bienvenido : {{user.first_name}} {{user.last_name}}, </h3>
+            </a> Bienvenido : {{user.first_name}} {{user.last_name}}, </h3>
         <a href="/logout" class="btn btn-info">Salir</a>
     </nav>
     <div>
         <center>
-        <img class="logo" name="logo" src="../../static/logo/logo_small.png"></img>
+            <a href="/dashboard">
+                <img class="logo" name="logo" src="../../static/logo/logo_small.png"></img>
+            </a>
+
         </center>
     <form action="/create/bitacora_botanica" method="post" class="col-7 p-5 my-2 bg-dark text-light mx-auto">
         <h2 class="text-primary">Agregar La Especie</h2><br>

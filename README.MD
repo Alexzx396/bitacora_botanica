@@ -1,8 +1,5 @@
 # 🏪 Bitacora Botanica 🏪
 
-Pablo Vegaaaaaaaaa
-
-
 La bitacora botanica le da la bienvenida a todas las personas que desean aportar informacion relevante al mundo de la botanica, clasificando la informacion pertinente adaptandose a los datos requeridos como pagina, que son los minimos para la clasificacion de una especie
 
 La finalidad de esta comunicadad es aportar datos del mundo de la botanica para las personas que se sientan con la necesidad de de obtener esta informacion con fines informativos o cientificos. Para participar en esta pagina: estara disponible para todo aquel que se sienta preparado para compartir su informacion detallada, apoyada de bibliografia pertinete a la informacion colocada.

@@ -7,6 +7,7 @@
     <title>Bitacora_botanica</title>
     <link width="40" height="40"  rel="shortcut icon" href="../static/logo/logo_small_icon_only_inverted.png">
     <!-- Bootstrap CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='css/style.css') }}">
 </head>
@@ -29,14 +30,24 @@
  
     <div class="mx-auto">
         <br><br>
+<?php include("coneccion.php") ?>
+
+<!-- Prueba buscador -->
         <center class="col-8 mx-auto">
-            <form action="../../form-result.php" method="post" target="_blank">
-                <p>
-                  <input type="search" name="busquedaDiccionarios" placeholder="Buscar...">
-                  <input type="submit" class="btn btn-primary" value="Buscar">
-                </p>
+            <form  action="buscador.php" method="post" >
+                <div>
+                    <label class="form-label">palabra a buscar</label>
+                    <input type="text" class="form-control" id="buscar" name="buscar">
+
+                  <!-- <label type="search" name="busquedaDiccionarios" placeholder="Buscar..." >
+                  <a href="/search/bitacora_filter/busquedaDiccionarios"  class="btn btn-primary" value="search">search</a> -->
+                  <!-- <input type="submit" value="searchxx" class="btn btn-primary"> -->
+                
+                </div>
             </form>
         </center>
+<!-- Prueba buscador -->
+
             <br><br>
 
         <!-- <div class="col-8 mx-auto">

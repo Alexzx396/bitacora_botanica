@@ -19,33 +19,23 @@
         <a href="/logout" class="btn btn-info">Salir</a>
     </nav>
     <div>
-        <center>
-        <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
-        </center>
-    </div><br><br>
-    <div class="d-flex col-12 justify-content-around">
+        <img class="logo" name="logo" src="../static/logo/logo_small.png">
+    </div>
+    <div class="d-flex col-12 justify-content-around mb-5">
         <a href="/new/bitacora_botanica" class="btn btn-primary">Agregar una especie</a>
     </div>
 
- 
-    <div class="mx-auto">
-        <br><br>
-<?php include("coneccion.php") ?>
 
 <!-- Prueba buscador -->
-        <center class="col-8 mx-auto">
-            <form  action="buscador.php" method="post" >
+        <div class="row">
+            <form class="col-8 offset-2 d-flex justify-content-center" action="buscador.php" method="post">
                 <div>
                     <label class="form-label">palabra a buscar</label>
-                    <input type="text" class="form-control" id="buscar" name="buscar">
-
-                  <!-- <label type="search" name="busquedaDiccionarios" placeholder="Buscar..." >
-                  <a href="/search/bitacora_filter/busquedaDiccionarios"  class="btn btn-primary" value="search">search</a> -->
-                  <!-- <input type="submit" value="searchxx" class="btn btn-primary"> -->
-                
+                    <input id="buscarInput" type="search" name="busquedaDiccionarios" placeholder="Buscar..." >
+                    <a id="buscarBtn" class="btn btn-primary" value="search">search</a>
                 </div>
             </form>
-        </center>
+        </div>
 <!-- Prueba buscador -->
 
             <br><br>
@@ -130,5 +120,6 @@
             </footer>
         </div>
     </div>
+    <script src="{{ url_for('static',  filename='js/logica.js') }}"></script>
 </body>
 </html>

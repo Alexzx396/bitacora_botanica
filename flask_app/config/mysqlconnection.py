@@ -1,30 +1,32 @@
 import pymysql.cursors
+import os
 
-# class MySQLConnection:
-#     def __init__(self, db):
-#         connection = pymysql.connect(host = 'botanicaserver.mysql.database.azure.com',
-#                                     user = 'codingdojogrupal@botanicaserver', 
-#                                     password = 'DKrH@!HcS78Y83a@', 
-#                                     db = db,
-#                                     charset = 'utf8mb4',
-#                                     cursorclass = pymysql.cursors.DictCursor,
-#                                     autocommit = True,
-#                                     ssl={'ca': '/flask_app/config/ssl/BaltimoreCyberTrustRoot.crt.pem'})
-#         self.connection = connection
+"""
+# Descomentar en producción
+class MySQLConnection:
+    def __init__(self, db):
+        connection = pymysql.connect(host = os.getenv('HOST_DB'),
+                                    user = os.getenv('USUARIO_DB'), 
+                                    password = os.getenv('CLAVE_DB'), 
+                                    db = db,
+                                    charset = 'utf8mb4',
+                                    cursorclass = pymysql.cursors.DictCursor,
+                                    autocommit = True,
+                                    ssl={'ca': '/flask_app/config/ssl/BaltimoreCyberTrustRoot.crt.pem'})
+        self.connection = connection
+"""
 
-
-
+# Descomentar al usarlo en desarrollo
 class MySQLConnection:
     def __init__(self, db):
         connection = pymysql.connect(host = 'localhost',
                                     user = 'root', 
-                                    password = 'programacion2022', 
+                                    password = '251001v@', 
                                     db = db,
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
         self.connection = connection
-
 
 
     def query_db(self, query, data=None):

@@ -7,7 +7,7 @@
     <title>Bitacora_botanica</title>
     <link width="40" height="40"  rel="shortcut icon" href="../static/logo/logo_small_icon_only_inverted.png">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='css/style.css') }}">
 </head>
 <body>
@@ -19,63 +19,68 @@
     </nav>
     <div>
         <center>
-        <img class="logo" name="logo" src="../../static/logo/logo_small.png"></img>
+            <a href="/dashboard">
+                <img class="logo" name="logo" src="../../static/logo/logo_small.png"></img>
+            </a>
         </center>
     </div><br><br>
-    <form action="/update/bitacora_botanica" method="post" class="col-7 p-5 my-3 bg-dark text-light mx-auto">
-        <h2 class="text-primary">Editar Especie</h2><br>
-        {% with messages = get_flashed_messages(category_filter=['bitacora_botanica']) %}
-            {% if messages %}
-            <div class="alert alert-danger" role="alert">
-                <strong>Error al ingresar el texto</strong>
-                    {% for message in messages %}
-                    <p>{{message}}</p>
-                    {% endfor %}
+    <div class="container w-50 rounded-5 shadow py-4">
+        <form action="/update/bitacora_botanica" method="post" class="mx-auto" >
+            <h2 class="display-6 mx-3">Editar Especie</h2><br>
+            {% with messages = get_flashed_messages(category_filter=['bitacora_botanica']) %}
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error al ingresar el texto</strong>
+                        {% for message in messages %}
+                        <p>{{message}}</p>
+                        {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+            
+            <div class="d-flex justify-content-between col-11 mx-auto">
+                <input type="hidden" name="id" value={{edit.id}}>
+                <div class="col-11">
+                    <div class="form-group pb-3">
+                        <label for="name">Especie:</label>
+                        <input type="text" name="name" class="form-control" value="{{edit.name}}">
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="Familia">Familia:</label>
+                        <input name="Familia"  cols="30" rows="5" class="form-control" value="{{edit.Familia}}">
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="Variedad">Variedad:</label>
+                        <input name="Variedad"  cols="30" rows="5" class="form-control" value="{{edit.Variedad}}">
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="date_made">Fecha de Clasificacion:</label>
+                        <input type="date" name="date_made" value="{{edit.date_made.strftime('%Y-%m-%d')}}" class="form-control">
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="lugarobservado">Lugar observado:</label>
+                        <input name="lugarobservado"  cols="30" rows="5" value="{{edit.lugarobservado}}" class="form-control"></input>
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="cultivo">Cultivo:</label>
+                        <textarea name="cultivo"  cols="10" rows="5" value="{{edit.cultivo}}"  class="form-control" ></textarea>
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="bibliografia">Bibliografia:</label>
+                        <textarea name="bibliografia"  cols="10" rows="5" value="{{edit.bibliografia}}" class="form-control" ></textarea>
+                    </div>
+                    <div class="form-group pb-3">
+                        <label for="description">Descripcion:</label>
+                        <textarea name="description"  cols="40" rows="5" value="{{edit.description}}" class="form-control" ></textarea>
+                    </div>
+                    <br>
+                    <input type="submit" value="Aceptar" class="btn btn-primary">
+                </div>
             </div>
-            {% endif %}
-        {% endwith %}
-        
-        <div class="d-flex justify-content-between col-11">
-            <input type="hidden" name="id" value={{edit.id}}>
-            <div class="col-11">
-                <div class="form-group">
-                    <label for="name">Especie:</label>
-                    <input type="text" name="name" class="form-control" value="{{edit.name}}">
-                </div>
-                <div class="form-group">
-                    <label for="Familia">Familia:</label>
-                    <input name="Familia"  cols="30" rows="5" class="form-control" value="{{edit.Familia}}">
-                </div>
-                <div class="form-group">
-                    <label for="Variedad">Variedad:</label>
-                    <input name="Variedad"  cols="30" rows="5" class="form-control" value="{{edit.Variedad}}">
-                </div>
-                <div class="form-group">
-                    <label for="date_made">Fecha de Clasificacion:</label>
-                    <input type="date" name="date_made" value="{{edit.date_made.strftime('%Y-%m-%d')}}" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="lugarobservado">Lugar observado:</label>
-                    <input name="lugarobservado"  cols="30" rows="5" value="{{edit.lugarobservado}}" class="form-control"></input>
-                </div>
-                <div class="form-group">
-                    <label for="cultivo">Cultivo:</label>
-                    <textarea name="cultivo"  cols="10" rows="5" value="{{edit.cultivo}}"  class="form-control" ></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="bibliografia">Bibliografia:</label>
-                    <textarea name="bibliografia"  cols="10" rows="5" value="{{edit.bibliografia}}" class="form-control" ></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="description">Descripcion:</label>
-                    <textarea name="description"  cols="40" rows="5" value="{{edit.description}}" class="form-control" ></textarea>
-                </div>
-                <br>
-                <input type="submit" value="Aceptar" class="btn btn-primary">
-            </div>
-        </div>
-        
-    </form><br><br>
+            
+        </form>
+    </div>
+    <br><br>
     <div>
         <footer >
           <ul class="nav justify-content-center border-bottom bg-light pb-4 mb-0">

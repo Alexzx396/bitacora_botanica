@@ -1,15 +1,32 @@
 import pymysql.cursors
 
+# class MySQLConnection:
+#     def __init__(self, db):
+#         connection = pymysql.connect(host = 'botanicaserver.mysql.database.azure.com',
+#                                     user = 'codingdojogrupal@botanicaserver', 
+#                                     password = 'DKrH@!HcS78Y83a@', 
+#                                     db = db,
+#                                     charset = 'utf8mb4',
+#                                     cursorclass = pymysql.cursors.DictCursor,
+#                                     autocommit = True,
+#                                     ssl={'ca': '/flask_app/config/ssl/BaltimoreCyberTrustRoot.crt.pem'})
+#         self.connection = connection
+
+
+
 class MySQLConnection:
     def __init__(self, db):
         connection = pymysql.connect(host = 'localhost',
                                     user = 'root', 
-                                    password = 'juega101', 
+                                    password = 'programacion2022', 
                                     db = db,
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
         self.connection = connection
+
+
+
     def query_db(self, query, data=None):
         with self.connection.cursor() as cursor:
             try:

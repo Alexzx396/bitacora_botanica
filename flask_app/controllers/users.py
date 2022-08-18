@@ -9,11 +9,19 @@ bcrypt = Bcrypt(app)
 def index():
     return render_template('index.html')
 
+
+
+#CREAR.........
+@app.route('/registro')
+def registro():
+    return render_template('registro.html')
+
+
 @app.route('/register',methods=['POST'])
 def register():
 
     if not User.validate_register(request.form):
-        return redirect('/')
+        return redirect('/registro')
     data ={ 
         "first_name": request.form['first_name'],
         "last_name": request.form['last_name'],
@@ -25,16 +33,24 @@ def register():
 
     return redirect('/dashboard')
 
+
+
+#INICIAR SESION
+@app.route('/login')
+def iniciar_sesion():
+    return render_template('login.html')
+
+
 @app.route('/login',methods=['POST'])
 def login():
     user = User.get_by_email(request.form)
 
     if not user:
-        flash("Invalid Email","login")
-        return redirect('/')
+        flash("Email incorrecto","login")
+        return redirect('/login')
     if not bcrypt.check_password_hash(user.password, request.form['password']):
-        flash("Invalid Password","login")
-        return redirect('/')
+        flash("Contraseña incorrecta","login")
+        return redirect('/login')
     session['user_id'] = user.id
     return redirect('/dashboard')
 

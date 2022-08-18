@@ -1,4 +1,4 @@
-from flask import render_template,redirect,session,request, flash
+from flask import render_template,redirect,session,request
 from flask_app import app
 from flask_app.models.bitacora_botanica import Bitacora_botanica
 from flask_app.models.user import User
@@ -16,7 +16,7 @@ def new_bitacora_botanica():
 # Prueba buscador
 #@app.route('/search/bitacora_filter/<id>')
 @app.route('/search/bitacora_filter/<string:planta>')
-def search_bitacora_filter(planta):
+def search_bitacora_filter(planta):  
     if 'user_id' not in session:
         return redirect('/logout')
     data = {
@@ -105,19 +105,19 @@ def destroy_bitacora_botanica(id):
     Bitacora_botanica.destroy(data)
     return redirect('/dashboard')
 
-#Paul prueba
-@app.route('/search/bitacora_botanica/<int:id>')
-def search(id):
-    if 'user_id' not in session:
-        return redirect('/logout')
-    data = {
-        "id":id
-    }
-    user_data = {
-        "id":session['user_id']
-    }
-    return render_template("search.html", bitacora_botanica= Bitacora_botanica.get_one(data),user=User.get_by_id(user_data))
-#Paul prueba
+
+# @app.route('/search/bitacora_botanica/<int:id>')
+# def search(id):
+#     if 'user_id' not in session:
+#         return redirect('/logout')
+#     data = {
+#         "id":id
+#     }
+#     user_data = {
+#         "id":session['user_id']
+#     }
+#     return render_template("search.html", bitacora_botanica= Bitacora_botanica.get_one(data),user=User.get_by_id(user_data))
+
 
 
 

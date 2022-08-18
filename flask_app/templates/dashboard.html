@@ -7,7 +7,6 @@
     <title>Bitacora_botanica</title>
     <link width="40" height="40"  rel="shortcut icon" href="../static/logo/logo_small_icon_only_inverted.png">
     <!-- Bootstrap CSS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='css/style.css') }}">
 </head>
@@ -20,21 +19,20 @@
     </nav>
     <div>
         <center>
-        <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
+            <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
         </center>
+
     </div><br><br>
+
     <div class="d-flex col-12 justify-content-around">
         <a href="/new/bitacora_botanica" class="btn btn-primary">Agregar una especie</a>
     </div>
 
- 
-    <div class="mx-auto">
         <br><br>
-
 <!-- Prueba buscador -->
+
         <center class="col-8 mx-auto">
             <form  >
-                
                     <!-- <label class="form-label">palabra a buscar</label>
                     <input type="text" class="form-control" id="buscar" name="buscar"> -->
 
@@ -42,14 +40,12 @@
                   <a href="/search/bitacora_filter/busquedaDiccionarios"  class="btn btn-primary" value="search">search</a> 
 
                   <!-- <input type="submit" value="searchxx" class="btn btn-primary"> -->
-                
-                
-            </form>
+            </form>     
         </center>
+        
 <!-- Prueba buscador -->
 
             <br><br>
-
         <!-- <div class="col-8 mx-auto">
         <h4>La Bitacora botanica</h4><br>
         <p>La bitacora botanica le da la bienvenida a todas las personas que desean aportar informacion relevante al mundo de la 
@@ -57,8 +53,7 @@
         la clasificacion de una especie</p>
         <p>La finalidad de esta comunicadad es aportar datos del mundo de la botanica para las personas que se sientan con la necesidad de
         de obtener esta informacion con fines informativos o cientificos. Para participar en esta pagina: estara disponible para todo aquel
-        que se sienta preparado  para compartir su informacion detallada, apoyada de bibliografia pertinete a la informacion colocada.  -->
-    
+        que se sienta preparado  para compartir su informacion detallada, apoyada de bibliografia pertinete a la informacion colocada.  --> 
 
         <div class="col-8 mx-auto">
         <h4>La Bitacora botanica</h4><br>
@@ -129,6 +124,5 @@
               <p class="text-center text-muted"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
             </footer>
         </div>
-    </div>
 </body>
 </html>

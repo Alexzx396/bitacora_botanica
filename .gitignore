@@ -1,8 +1,14 @@
 # Byte-compiled / optimized / DLL files
+Pipfile
+Pipfile.lock
+config/
+.DS_Store
+
 __pycache__/
 *.py[cod]
 *$py.class
-
+.vscode/
+db/
 # C extensions
 *.so
 

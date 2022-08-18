@@ -13,6 +13,20 @@ def new_bitacora_botanica():
     }
     return render_template('new_bitacora_botanica.html',user=User.get_by_id(data))
 
+# Prueba buscador
+#@app.route('/search/bitacora_filter/<id>')
+@app.route('/search/bitacora_filter/<string:planta>')
+def search_bitacora_filter(planta):
+    if 'user_id' not in session:
+        return redirect('/logout')
+    data = {
+        "id":session['user_id']
+    }
+    filter = {
+        "id": planta
+    }
+    return render_template("dashboard.html",user=User.get_by_id(data),bitacora_botanica=Bitacora_botanica.get_search(filter))
+# Prueba buscador
 
 @app.route('/create/bitacora_botanica',methods=['POST'])
 def create_bitacora_botanica():

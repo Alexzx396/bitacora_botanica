@@ -32,17 +32,18 @@ class Bitacora_botanica:
             all_bitacora_botanica.append( cls(row) )
         return all_bitacora_botanica
 
-    # Paul
+# Prueba buscador
     @classmethod
-    def get_search(cls):
-        query = "SELECT * FROM bitacora_botanica where (name like'%/%(buscar)s%') or (Familia like'%/%(buscar)s%') or (Variedad like'%/%(buscar)s%') or (lugarobservado like'%/%(buscar)s%');"
+    def get_search(cls,filter):
+        print (filter)
+        query = "SELECT * FROM bitacora_botanica where (name like'%"+filter['id']+"%') or (Familia like'%"+filter['id']+"%') or (Variedad like'%"+filter['id']+"%') or (lugarobservado like'%"+filter['id']+"%');"
         results =  connectToMySQL(cls.db_name).query_db(query)
         all_bitacora_botanica = []
         for row in results:
             print(row['date_made'])
             all_bitacora_botanica.append( cls(row) )
         return all_bitacora_botanica
-    # Paul
+# Prueba buscador
     
     @classmethod
     def get_one(cls,data):

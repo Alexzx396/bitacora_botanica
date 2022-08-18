@@ -9,6 +9,7 @@ __pycache__/
 *$py.class
 .vscode/
 db/
+
 # C extensions
 *.so
 

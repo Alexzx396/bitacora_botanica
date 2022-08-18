@@ -18,6 +18,7 @@
         <a href="/logout" class="btn btn-info">Salir</a>
     </nav>
     <div>
+
         <center>
             <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
         </center>
@@ -28,33 +29,23 @@
         <a href="/new/bitacora_botanica" class="btn btn-primary">Agregar una especie</a>
     </div>
 
-        <br><br>
+        <br><br><br>
 <!-- Prueba buscador -->
 
-        <center class="col-8 mx-auto">
-            <form  >
-                    <!-- <label class="form-label">palabra a buscar</label>
-                    <input type="text" class="form-control" id="buscar" name="buscar"> -->
-
-                  <input type="search" name="busquedaDiccionarios" placeholder="Buscar..." >
-                  <a href="/search/bitacora_filter/busquedaDiccionarios"  class="btn btn-primary" value="search">search</a> 
-
-                  <!-- <input type="submit" value="searchxx" class="btn btn-primary"> -->
-            </form>     
-        </center>
+        <div class="row">
+            <form class="col-8 offset-2 d-flex justify-content-center" action="buscador.php" method="post">
+                <div class="input-group col-4">
+                    <label class="form-label"></label>
+                    <input class="form-control" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar..." >
+                    <a id="buscarBtn" class="btn btn-primary " value="search">Search</a>
+                </div>
+            </form>
+        </div><br><br>
         
 <!-- Prueba buscador -->
 
             <br><br>
-        <!-- <div class="col-8 mx-auto">
-        <h4>La Bitacora botanica</h4><br>
-        <p>La bitacora botanica le da la bienvenida a todas las personas que desean aportar informacion relevante al mundo de la 
-        botanica, clasificando la informacion pertinente adaptandose a los datos requeridos como pagina, que son los minimos para 
-        la clasificacion de una especie</p>
-        <p>La finalidad de esta comunicadad es aportar datos del mundo de la botanica para las personas que se sientan con la necesidad de
-        de obtener esta informacion con fines informativos o cientificos. Para participar en esta pagina: estara disponible para todo aquel
-        que se sienta preparado  para compartir su informacion detallada, apoyada de bibliografia pertinete a la informacion colocada.  --> 
-
+      
         <div class="col-8 mx-auto">
         <h4>La Bitacora botanica</h4><br>
         <p>Antes de agregar una especie asegurate que tus datos sean veridicos, ademas de tener los datos minimos para la clasificacion de una especie
@@ -124,5 +115,6 @@
               <p class="text-center text-muted"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
             </footer>
         </div>
+        <script src="{{ url_for('static',  filename='js/logica.js') }}"></script>
 </body>
 </html>

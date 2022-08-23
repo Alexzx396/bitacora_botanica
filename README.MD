@@ -13,6 +13,7 @@ La bitácora de trabajo es un cuaderno en el cual las personas realizan anotacio
 ## 👨‍💻 Datos del Creador 👨‍💻
 
 * **Nombre:** Alex Arce
+* **Colaboradores:** Pablo Vega y Vicente Martines
 * **Pais:** Chile
 * **Docente:** Marcelo Argotti
 

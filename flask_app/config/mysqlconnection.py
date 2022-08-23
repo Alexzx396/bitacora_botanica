@@ -1,4 +1,5 @@
 import pymysql.cursors
+# import os
 
 class MySQLConnection:
     def __init__(self, db):
@@ -11,6 +12,24 @@ class MySQLConnection:
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
         self.connection = connection
+
+# Descomentar en producción
+
+# class MySQLConnection:
+#     def __init__(self, db):
+#         connection = pymysql.connect(host = os.getenv('HOST_DB'),
+#                                     user = os.getenv('USUARIO_DB'), 
+#                                     password = os.getenv('CLAVE_DB'), 
+#                                     db = db,
+#                                     charset = 'utf8mb4',
+#                                     cursorclass = pymysql.cursors.DictCursor,
+#                                     autocommit = True,
+#                                     ssl={'ca': '/flask_app/config/ssl/BaltimoreCyberTrustRoot.crt.pem'})
+#         self.connection = connection
+
+# Descomentar al usarlo en desarrollo
+
+
     def query_db(self, query, data=None):
         with self.connection.cursor() as cursor:
             try:

@@ -32,7 +32,9 @@ La bitácora de trabajo es un cuaderno en el cual las personas realizan anotacio
 ## 📁 Visualizaciion del proyecto 📁
 
 <img src="./flask_app/static/README/bitacora botanica1.png" alt="My cool logo"/>
-<img src="./flask_app/static/README/bitacora botanica2.png" alt="My cool logo"/>
+<img src="./flask_app/static/README/imagen6.png" alt="My cool logo"/>
+<img src="./flask_app/static/README/foto7.png" alt="My cool logo"/>
+<img src="./flask_app/static/README/imagen5.png" alt="My cool logo"/>
 <img src="./flask_app/static/README/bitacora botanica3.png" alt="My cool logo"/>
 <img src="./flask_app/static/README/bitacora botanica4.png" alt="My cool logo"/>
 

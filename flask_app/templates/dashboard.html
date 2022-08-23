@@ -33,7 +33,18 @@
 <!-- Prueba buscador -->
 
         <div class="row">
-            <form class="col-8 offset-2 d-flex justify-content-center" action="buscador.php" method="post">
+            <form class="col-8 offset-2 d-flex justify-content-center" action="/buscador" method="post">
+                {% with messages = get_flashed_messages(category_filter=['buscador']) %}
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>NOOOOOOO!!!!</strong>
+                        {% for message in messages %}
+                        <p>{{message}}</p>
+                        {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+            
                 <div class="input-group col-4">
                     <label class="form-label"></label>
                     <input class="form-control" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar..." >

@@ -44,7 +44,6 @@ def iniciar_sesion():
 @app.route('/login',methods=['POST'])
 def login():
     user = User.get_by_email(request.form)
-
     if not user:
         flash("Email incorrecto","login")
         return redirect('/login')

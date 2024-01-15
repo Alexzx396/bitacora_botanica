@@ -90,7 +90,11 @@
                         <td>
                             {% if bitacora_botanica.image_url %}
                                 {% set image_urls = bitacora_botanica.image_url.split(',') %}
-                                <img src="{{ url_for('uploads', filename=image_urls[0]) }}" class="img-fluid" width="35" height="40">
+                                {% if image_urls[0] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + image_urls[0]) }}" class="img-fluid" width="35" height="40">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
                             {% else %}
                                 <p>No hay imagen disponible.</p>
                             {% endif %}
@@ -137,6 +141,6 @@
               <p class="text-center text-muted"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
             </footer>
         </div>
-        <script src="{{ url_for('static',  filename='js/logica.js') }}"></script>
+        <script src="{{ url_for('static',  filename='js/logica.js') }}"></script>    
 </body>
 </html>

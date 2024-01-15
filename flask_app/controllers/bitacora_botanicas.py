@@ -1,10 +1,15 @@
 from flask import render_template, redirect, session, request, flash, url_for
 from flask_app import app
 from flask_app.models.bitacora_botanica import Bitacora_botanica
-from flask_app.models.utils import allowed_file
+
 from flask_app.models.user import User
 from werkzeug.utils import secure_filename
 import os
+
+@staticmethod
+def allowed_file(filename):
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 
 @app.route('/new/bitacora_botanica')
@@ -27,28 +32,31 @@ def search_bitacora_filter(planta):
 
 @app.route('/create/bitacora_botanica', methods=['POST'])
 def create_bitacora_botanica():
-    # Redirige a 'logout' si el usuario no está en sesión o a 'new_bitacora_botanica' si la validación falla.
-    if 'user_id' not in session:
-        return redirect('logout')
-    if not Bitacora_botanica.validate_bitacora_botanica(request.form):
-        return redirect(url_for('new_bitacora_botanica'))
-    
-    filenames = [] # Lista para almacen
-    
-    # Obtén la lista de objetos 'FileStorage' del campo de archivos 'imagenes'
-    images = request.files.getlist('imagenes[]') 
-    
+    # ... [código anterior] ...
+
+    print("Request files:", request.files)  # Imprimir archivos recibidos en el request
+
+    filenames = []  # Lista para almacenar nombres de archivo
+
+    images = request.files.getlist('imagenes[]')
     for image in images:
+        print("Procesando imagen:", image.filename)  # Imprimir nombre de archivo de la imagen
+
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
+            print("Nombre de archivo seguro:", filename)  # Imprimir nombre de archivo seguro
+
             image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            image.save(image_path)
-            filenames.append(filename)
+            print("Ruta de guardado de la imagen:", image_path)  # Imprimir ruta de guardado
+
+            try:
+                image.save(image_path)
+                filenames.append(filename)
+            except Exception as e:
+                print("Error al guardar la imagen:", e)  # Imprimir error de guardado
         else:
-           if image:
-                flash(f"Archivo no permitido: {image.filename}. Solo se permiten las extensiones: png, jpg, jpeg, gif.", 'error')
-            
-    image_urls = ','.join(filenames)
+            if image:
+                flash(f"Archivo no permitido: {image.filename}", 'error')
 
     data = {
         "name": request.form["name"],
@@ -59,7 +67,7 @@ def create_bitacora_botanica():
         "Familia": request.form["Familia"],
         "Variedad": request.form["Variedad"],
         "date_made": request.form["date_made"],
-        "image_url": image_urls,
+        "image_url": ','.join(filenames),
         "user_id": session["user_id"]
     }
     Bitacora_botanica.save(data)
@@ -113,34 +121,6 @@ def destroy_bitacora_botanica(id):
     data = {"id": id}
     Bitacora_botanica.destroy(data)
     return redirect('/dashboard')
-
-
-@app.route('/upload_file', methods=['POST'])
-def upload_file():
-    if request.method == 'POST':
-        # Verificar si el componente 'file' está en la solicitud
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-
-        file = request.files['file']
-
-        # Si el usuario no selecciona un archivo, el navegador
-        # podría enviar una parte vacía sin nombre de archivo
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            try:
-                file.save(file_path)
-                flash('File successfully uploaded')
-            except Exception as e:
-                flash('An error occurred: ' + str(e))
-                return redirect(request.url)
-    
 
 
 

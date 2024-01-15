@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitacora_botanica</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='logo/logo_small_icon_only_inverted.png') }}" width="40" height="40">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Incluir CSS de Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/imagePreview.js') }}"></script>
 </head>
@@ -34,29 +36,30 @@
                 <p class="card-text fs-4">Descripción: {{ bitacora_botanica.description }}</p>
                 <p class="card-text fs-4">Autor: {{ bitacora_botanica.bibliografia }}</p><br><br>
                 
-                <div  id="imagePreview" style="margin-bottom: 20px;" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        {% if bitacora_botanica.image_url %}
-                            {% set image_urls = bitacora_botanica.image_url.split(',') %}
-                            {% for url in image_urls %}
-                                
-                                <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                    <img src="{{ url_for('uploads', filename= url) }}" class="d-block w-100" alt="Imagen de entrada">
-                                </div>
-                                    
-                            {% endfor %}
-                        {% else %}
-                            <p>No hay imágenes disponibles.</p>
-                        {% endif %}
+                <div class="container mt-3">
+                    <div id="bitacoraBotanicaCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% if bitacora_botanica.image_url %}
+                                {% set image_urls = bitacora_botanica.image_url.split(',') %}
+                                {% for url in image_urls %}
+                                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                        <img src="{{ url_for('static', filename='uploads/' + url) }}" class="d-block w-50" alt="Imagen de entrada">
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>No hay imágenes disponibles.</p>
+                            {% endif %}
+                        </div>
+                        
+                        <button class="carousel-control-prev" type="button" data-bs-target="#bitacoraBotanicaCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#bitacoraBotanicaCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
                     </div>
-                    <button  class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#bitacoraBotanicaCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon custom-carousel-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-                    <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#bitacoraBotanicaCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon custom-carousel-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -72,6 +75,8 @@
         </ul>
         <p class="text-center text-muted">&copy; 2022 Por Alex Arce, Ing.Agronomo</p>
     </footer>
+    <!-- Bootstrap JS con Popper.js (necesario para ciertos componentes, como los tooltips) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
 

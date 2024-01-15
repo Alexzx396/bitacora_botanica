@@ -1,5 +1,4 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask_app.models.utils import allowed_file
 from flask import app, flash
 from werkzeug.utils import secure_filename
 import os
@@ -22,23 +21,51 @@ class Bitacora_botanica:
         self.updated_at = db_data['updated_at']
         self.image_url = db_data['image_url']  
 
+    @staticmethod
+    def allowed_file(filename):
+        allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
     @classmethod
     def save(cls, data, images=None):
         image_urls = []
+
         if images:
+
             for image in images:
-                if image and allowed_file(image.filename):
+                print("Procesando imagen:", image.filename)  # Depuración
+
+                if image and cls.allowed_file(image.filename):
+                    print("Imagen permitida:", image.filename)  # Depuración
                     filename = secure_filename(image.filename)
                     image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    image.save(image_path)
-                    image_urls.append(filename)
-                else:
-                    # Manejar la situación en la que el archivo no es permitido o es nulo
-                    pass
-        data['image_url'] = ','.join(image_urls) if image_urls else None
 
-        query = "INSERT INTO bitacora_botanica (name, description, lugarobservado, cultivo, bibliografia, Familia, Variedad, date_made, user_id, image_url) VALUES (%(name)s, %(description)s, %(lugarobservado)s, %(cultivo)s, %(bibliografia)s, %(Familia)s, %(Variedad)s, %(date_made)s, %(user_id)s, %(image_url)s);"
-        return connectToMySQL(cls.db_name).query_db(query, data)
+                    try:
+                        image.save(image_path)
+                        image_urls.append(filename)
+                        print("Imagen guardada y añadida a la lista:", filename)  # Depuración
+                    except Exception as e:
+                        print("Error al guardar la imagen:", e)  # Manejo de errores
+                else:
+                    print(f"Archivo no permitido o no válido: {image.filename}")  # Depuración
+                # Concatena los nombres de archivo en una cadena separada por comas
+                print("Filenames antes de unir:", image_urls)
+                data['image_url'] = ','.join(image_urls) if image_urls else None
+                print("Image URLs:", data['image_url'])  # Depuración
+
+
+        # Consulta SQL para insertar los datos
+        query = """
+        INSERT INTO bitacora_botanica 
+        (name, description, lugarobservado, cultivo, bibliografia, Familia, Variedad, date_made, user_id, image_url) 
+        VALUES (%(name)s, %(description)s, %(lugarobservado)s, %(cultivo)s, %(bibliografia)s, %(Familia)s, %(Variedad)s, %(date_made)s, %(user_id)s, %(image_url)s);
+        """
+        # Intenta ejecutar la consulta SQL y maneja excepciones
+        try:
+            return connectToMySQL(cls.db_name).query_db(query, data)
+        except Exception as e:
+            print(f"Error al insertar en la base de datos: {e}")
+            return None
 
 
     @classmethod
@@ -71,19 +98,29 @@ class Bitacora_botanica:
     @classmethod
     def update(cls, data, new_images=None):
         image_urls = data['image_url'].split(',') if data['image_url'] else []
+        print("URLs de imagen existentes:", image_urls)  # Depuración
+
         if new_images:
             for new_image in new_images:
-                if new_image and allowed_file(new_image.filename):
+                if new_image and cls.allowed_file(new_image.filename):
                     filename = secure_filename(new_image.filename)
-                    new_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    image_urls.append(filename)
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    try:
+                        new_image.save(image_path)
+                        image_urls.append(filename)
+                        print("Imagen guardada:", filename)  # Depuración
+                    except Exception as e:
+                        print("Error al guardar la imagen:", e)  # Manejo de errores
                 else:
-                    # Manejar la situación en la que el archivo no es permitido o es nulo
-                    pass
+                    if new_image:
+                        print("Archivo no permitido o no válido:", new_image.filename)  # Depuración
+
         data['image_url'] = ','.join(image_urls)
+        print("URLs de imagen actualizadas:", data['image_url'])  # Depuración
 
         query = "UPDATE bitacora_botanica SET name = %(name)s, description = %(description)s, lugarobservado = %(lugarobservado)s, cultivo = %(cultivo)s, bibliografia = %(bibliografia)s, Familia = %(Familia)s, Variedad = %(Variedad)s, date_made = %(date_made)s, image_url = %(image_url)s, updated_at = NOW() WHERE id = %(id)s;"
         return connectToMySQL(cls.db_name).query_db(query, data)
+
 
     
     @classmethod

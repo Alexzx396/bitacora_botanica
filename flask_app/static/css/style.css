@@ -30,7 +30,10 @@ footer {
 .carousel {
   display: flex;
   align-items: center;
+}
 
+.carousel-item img {
+  margin: auto; 
 }
 
 .custom-carousel-control {

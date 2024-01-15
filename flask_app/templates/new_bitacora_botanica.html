@@ -25,14 +25,14 @@
             </a>
         </center>
         <div class="container w-50 rounded-5 shadow py-4">
-            <form action="/create/bitacora_botanica" method="post" enctype="multipart/form-data" class="mx-auto">
+            <form action="/create/bitacora_botanica" method="POST" enctype="multipart/form-data" class="mx-auto">
                 <h2 class="display-6 mx-3">Ingresar Especie</h2><br>
                 {% with messages = get_flashed_messages(category_filter=['bitacora_botanica']) %}
                     {% if messages %}
                     <div class="alert alert-danger" role="alert">
                         <strong>Error al ingresar el texto</strong>
                             {% for message in messages %}
-                            <p>{{message}}</p>
+                              <p>{{message}}</p>
                             {% endfor %}
                     </div>
                     {% endif %}

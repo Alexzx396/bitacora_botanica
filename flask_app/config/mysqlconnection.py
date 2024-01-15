@@ -2,15 +2,17 @@ import pymysql.cursors
 # import os
 
 class MySQLConnection:
-    def __init__(self, db):
+    def __init__(self, biitacora_botanica):
         connection = pymysql.connect(host = 'localhost',
                                     user = 'root', 
-                                    password = 'juega101', 
-                                    db = db,
+                                    password = '', 
+                                    db = biitacora_botanica,
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
+        print(connection)
         self.connection = connection
+    
 
 # Descomentar en producción
 

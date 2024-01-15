@@ -73,6 +73,19 @@
                         <label for="description">Descripcion:</label>
                         <textarea name="description"  cols="40" rows="5" value="{{edit.description}}" class="form-control" ></textarea>
                     </div>
+                    <!-- Visualización y cambio de la imagen -->
+                    <div class="form-group pb-3">
+                        {% if edit.image_url %}
+                            <!-- Si hay una imagen asociada con la entrada, se muestra -->
+                            <img src="{{ url_for('uploads', filename=edit.image_url) }}" alt="Imagen Actual" class="img-fluid">
+                        {% else %}
+                            <!-- Mensaje que se muestra si no hay imagen -->
+                            <p>No hay imagen actualmente.</p>
+                        {% endif %}
+                        <!-- Campo de entrada para subir una nueva imagen -->
+                        <label for="imagen" class="form-label">Cambiar Imagen:</label>
+                        <input type="file" name="imagen" id="imagen" class="form-control">
+                    </div>
                     <br>
                     <input type="submit" value="Aceptar" class="btn btn-primary">
                 </div>

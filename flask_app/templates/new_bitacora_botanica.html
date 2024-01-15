@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/imagePreview.js') }}"></script>
 </head>
 <body>
     <nav class="navbar navbar-light bg-light">
@@ -20,11 +21,11 @@
     <div>
         <center>
             <a href="/dashboard">
-                <img class="logo" name="logo" src="../../static/logo/logo_small.png"></img>
+                <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
             </a>
         </center>
         <div class="container w-50 rounded-5 shadow py-4">
-            <form action="/create/bitacora_botanica" method="post" class="mx-auto" >
+            <form action="/create/bitacora_botanica" method="post" enctype="multipart/form-data" class="mx-auto">
                 <h2 class="display-6 mx-3">Ingresar Especie</h2><br>
                 {% with messages = get_flashed_messages(category_filter=['bitacora_botanica']) %}
                     {% if messages %}
@@ -63,22 +64,24 @@
                             <textarea name="cultivo"  cols="10" rows="5" class="form-control"></textarea>
                         </div>
                         <div class="form-group pb-3">
-                            <label for="bibliografia">Bibliografia:</label>
+                            <label for="bibliografia">Autor:</label>
                             <textarea name="bibliografia"  cols="10" rows="5" class="form-control"></textarea>
                         </div>
                         <div class="form-group pb-3">
                             <label for="description">Descripcion:</label>
                             <textarea name="description"  cols="30" rows="5" class="form-control"></textarea>
                         </div><br>
-                        <!-- insertar imagen -->
-                        <div class="form-group" enctype="multipart/form-data" action="imgproc/scan.py" method="post">
-                            <label for="description">Insertar Imagen:</label>
-                            <input type="file" name="filename" />
+
+                        <!-- Campo de carga de imágenes -->
+                       
+                        <div class="form-group pb-3">
+                            <label for="imagenes">Insertar Imágenes:</label>
+                            <input type="file" name="imagenes[]" id="imagenes" class="form-control" multiple accept="image/*">
+                            <small class="form-text text-muted">Seleccione múltiples imágenes usando la tecla Ctrl o Shift.</small>
                         </div>
-                        <!-- insertar imagen -->
-        
+                        
                         <br>
-                        <input type="submit" value="Aceptar" class="btn btn-primary">
+                        <input type="submit" value="Subir" class="btn btn-primary">
                         </div>
                     </div>
                 
@@ -104,3 +107,4 @@
     </div>
 </body>
 </html>
+

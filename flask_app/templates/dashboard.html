@@ -30,7 +30,7 @@
     </div>
 
         <br><br><br>
-<!-- Prueba buscador -->
+    <!-- Prueba buscador -->
 
         <div class="row">
             <form class="col-8 offset-2 d-flex justify-content-center" action="/buscador" method="post">
@@ -75,7 +75,9 @@
                     <th>Familia</th>
                     <th>Variedad</th>
                     <th>Fecha de Calsificacion</th>
+                    <th>Imagen</th>
                     <th>Accion</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -86,12 +88,21 @@
                         <td>{{bitacora_botanica.Variedad}}</td>
                         <td>{{bitacora_botanica.date_made.strftime('%Y-%m-%d')}}</td>
                         <td>
+                            {% if bitacora_botanica.image_url %}
+                                {% set image_urls = bitacora_botanica.image_url.split(',') %}
+                                <img src="{{ url_for('uploads', filename=image_urls[0]) }}" class="img-fluid" width="35" height="40">
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        </td>
+                        <td>
                             <a href="/bitacora_botanica/{{bitacora_botanica.id}}">Ver-Info</a>
                             {% if bitacora_botanica.user_id == session.user_id %}
                             <a href="/edit/bitacora_botanica/{{bitacora_botanica.id}}">Editar</a>
                             <a href="/destroy/bitacora_botanica/{{bitacora_botanica.id}}">Borrar</a>
                             {% endif %}
                         </td>
+                        
                     </tr>
                 {% endfor %}
             </tbody>

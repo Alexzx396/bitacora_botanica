@@ -13,29 +13,22 @@
 <body>
     <nav class="navbar navbar-light bg-light">
         <h3  class="text-center"> <a class="navbar-brand" href="#">
-            <img src="../static/logo/logo_small_icon_only_inverted.png" width="40" height="40" alt="">
+            <img src="{{ url_for('static', filename='logo/logo_small_icon_only_inverted.png') }}" width="40" height="40" alt="">
           </a> Bienvenido : {{user.first_name}} {{user.last_name}}, </h3>
         <a href="/logout" class="btn btn-info">Salir</a>
     </nav>
+    
     <div>
-
-        <center>
-            <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
-        </center>
-
-    </div><br><br>
-
-    <div class="d-flex col-12 justify-content-around">
-        <a href="/new/bitacora_botanica" class="btn btn-primary">Agregar una especie</a>
+        <div class="logo-container">
+            <img class="logo" name="logo" src="{{ url_for('static', filename='logo/logo_small.png') }}" alt="Logo">
+        </div>
     </div>
-
-        <br><br><br>
-    <!-- Prueba buscador -->
-
-        <div class="row">
-            <form class="col-8 offset-2 d-flex justify-content-center" action="/buscador" method="post">
-                {% with messages = get_flashed_messages(category_filter=['buscador']) %}
-                {% if messages %}
+    <!-- Buscador -->
+    <!-- Buscador -->
+    <div class="row my-3">
+        <form class="col-12 col-md-8 offset-md-2" action="/buscador" method="post">
+            {% with messages = get_flashed_messages(category_filter=['buscador']) %}
+            {% if messages %}
                 <div class="alert alert-danger" role="alert">
                     <strong>NOOOOOOO!!!!</strong>
                         {% for message in messages %}
@@ -44,31 +37,191 @@
                 </div>
                 {% endif %}
             {% endwith %}
-            
-                <div class="input-group col-4">
-                    <label class="form-label"></label>
-                    <input class="form-control" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar..." >
-                    <a id="buscarBtn" class="btn btn-primary " value="search">Search</a>
-                </div>
-            </form>
-        </div><br><br>
-        
-<!-- Prueba buscador -->
+            <div class="d-flex justify-content-center my-4">
+                <input class="form-control form-control-lg" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar especies que has subido...">
+                <a id="buscarBtn" class="btn btn-primary btn-lg custom-btn" value="search">Buscador</a>
+            </div>
+        </form>
+    </div><br><br>
 
-            <br><br>
-      
-        <div class="col-8 mx-auto">
-        <h4>La Bitacora botanica</h4><br>
-        <p>Antes de agregar una especie asegurate que tus datos sean veridicos, ademas de tener los datos minimos para la clasificacion de una especie
-        como por ejemplo: <strong>Especie, Veriedad, Familia, Descripcion, cultivo y Lugar observado</strong>.  Se recomienda Ademas acompañar toda la informacion con una <strong>bibliografia
-        o referencia</strong> a fin a la especie conseguida
-        </p>
-        
+
     
-        </div >
-        <br><br>
-        <table class="table table-hover col-8 mx-auto">
-            <h4 class="table table-hover col-8 mx-auto">General</h4>
+    <div class="container my-7">
+        <div class="instrucciones ">
+            <h3>Instrucciones para Agregar una Especie</h3>
+            <p>Antes de agregar una nueva especie a la bitácora botánica, por favor, asegúrate de que tu información sea precisa y completa. Los siguientes datos son esenciales para una clasificación correcta y detallada:</p>
+            <ul>
+                <li><strong>Especie:</strong> El nombre científico de la especie.</li>
+                <li><strong>Variedad:</strong> La variedad específica de la especie, si aplica.</li>
+                <li><strong>Familia:</strong> La familia taxonómica a la que pertenece la especie.</li>
+                <li><strong>Descripción:</strong> Un resumen detallado sobre la especie, incluyendo características únicas.</li>
+                <li><strong>Cultivo:</strong> Información sobre cómo se cultiva o mantiene la especie.</li>
+                <li><strong>Lugar Observado:</strong> El lugar donde se observó o descubrió la especie.</li>
+                <li><strong>Imagenes:</strong> Procura tener imagenes en formatos permitidos ( png, jpg, jpeg, gif ) .</li>
+            </ul>
+            <p>Es recomendable que toda información esté respaldada por fuentes confiables. Por favor, incluye cualquier bibliografía o referencia relevante que apoye tus datos. Esta práctica no solo mejora la credibilidad de la información sino que también beneficia a toda la comunidad científica.</p>
+        </div>
+    </div><br><br>
+    
+
+        <!-- Botón para Agregar una Especie -->
+        <div class="d-flex justify-content-center my-4">
+            <a href="/new/bitacora_botanica" class="btn btn-Especially btn-primary btn-lg">Agregar una Especie</a>
+        </div>
+        <br><br><br>
+
+        <!-- Sección de Últimas Imágenes Subidas -->
+        <div class="container my-4 col-8">
+            <h2 class="text-center mb-4">Últimas Imágenes Subidas</h2><br><br>
+            <div class="row">
+                <!-- Caja para la primera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                            {% if bitacora_botanica.image_url %}
+                                {% set image_urls = bitacora_botanica.image_url.split(',') %}
+                                {% if image_urls[0] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + image_urls[0]) }}" class="img-fluid" width="35" height="40">
+                                {% else %}
+                                    <p>No hay imagen disponible.</p>
+                                {% endif %}
+                            {% else %}
+                                <p>No hay imagen disponible.</p>
+                            {% endif %}
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 1.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la segunda imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 2">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 2.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la tercera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_tercera_imagen') }}" class="card-img-top" alt="Imagen 3">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 3.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br><br>
+
+         <!-- Sección de Últimas Imágenes Subidas -->
+         <div class="container my-4 col-8">
+            <div class="row">
+                <!-- Caja para la primera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 4">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 4.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la segunda imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 5">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 5.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la tercera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_tercera_imagen') }}" class="card-img-top" alt="Imagen 6">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 6.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container my-4 col-8"><br><br>
+            <div class="row">
+                <!-- Caja para la primera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_primera_imagen') }}" class="card-img-top" alt="Imagen 7">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 7.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la segunda imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 8">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 8.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la tercera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_tercera_imagen') }}" class="card-img-top" alt="Imagen 9">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 9.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><br><br>
+
+         <!-- Sección de Últimas Imágenes Subidas -->
+         <div class="container my-4 col-8">
+            <div class="row">
+                <!-- Caja para la primera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 10">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 10.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la segunda imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_segunda_imagen') }}" class="card-img-top" alt="Imagen 11">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 11.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja para la tercera imagen -->
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <img src="{{ url_for('static', filename='ruta_a_la_tercera_imagen') }}" class="card-img-top" alt="Imagen 12">
+                        <div class="card-body">
+                            <p class="card-text">Descripción de la imagen 12.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br><br><br>
+
+        
+        <table class="table table-hover col-9 mx-auto">
+            <h4 class="table-hover col-9 mx-auto"></a> {{user.first_name}}, Chequea tus colaboraciones</h4><br>
             <thead>
                 <tr>
                     <th>Especie</th>
@@ -100,47 +253,50 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="/bitacora_botanica/{{bitacora_botanica.id}}">Ver-Info</a>
+                            <a class="btn btn-botanico" href="/bitacora_botanica/{{bitacora_botanica.id}}">Ver Tarjeta</a>
                             {% if bitacora_botanica.user_id == session.user_id %}
-                            <a href="/edit/bitacora_botanica/{{bitacora_botanica.id}}">Editar</a>
-                            <a href="/destroy/bitacora_botanica/{{bitacora_botanica.id}}">Borrar</a>
+                            <a class="btn btn-botanico" href="/edit/bitacora_botanica/{{bitacora_botanica.id}}">Editar</a>
+                            <a class="btn btn-botanico" href="/destroy/bitacora_botanica/{{bitacora_botanica.id}}">Borrar</a>
                             {% endif %}
                         </td>
-                        
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
         <br><br>
-        <table class="table table-hover col-10 mx-auto">
-            <h4 class="table table-hover col-10 mx-auto">Diccionarios Disponibles</h4>
-            <thead>
-                <tr>
-                    <th><a href="#"><strong>Suculenta</strong></a></th>
-                    <th><a href="#"><strong>CactusSuculenta</strong></a></th><strong></strong>
-                    <th><a href="#"><strong>Hortalizas</strong></a></th>
-                    <th><a href="#"><strong>Herbaceas</strong></a></th>
-                    <th><a href="#"><strong>Frutales</strong></a></th>
-                    <th><a href="#"><strong>Bulbosas</strong></a></th>
-                    <th><a href="#"><strong>Geofitas</strong></a></th>
-                    <th><a href="#"><strong>Hongos</strong></a></th>
-                    <th><a href="#"><strong>Medicinales</strong></a></th>
-                </tr>
-                </tr>
-            </thead>
-        </table>
+        <h4 class="text-center mb-3">Diccionarios Disponibles</h4>
+        <div class="table table-hover col-8 mx-auto">
+            <table class="table table-hover mx-auto">
+                <thead>
+                    <tr>
+                        <th><a href="#" class="link-diccionario">Suculenta</a></th>
+                        <th><a href="#" class="link-diccionario">CactusSuculenta</a></th>
+                        <th><a href="#" class="link-diccionario">Hortalizas</a></th>
+                        <th><a href="#" class="link-diccionario">Herbaceas</a></th>
+                        <th><a href="#" class="link-diccionario">Frutales</a></th>
+                        <th><a href="#" class="link-diccionario">Bulbosas</a></th>
+                        <th><a href="#" class="link-diccionario">Geofitas</a></th>
+                        <th><a href="#" class="link-diccionario">Hongos</a></th>
+                        <th><a href="#" class="link-diccionario">Medicinales</a></th>
+                    </tr>
+                </thead>
+            </table>
+        </div> <br/><br/>
         <div>
-            <footer >
-              <ul class="nav justify-content-center border-bottom bg-light pb-4 mb-0">
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
-              </ul>
-              <p class="text-center text-muted"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
-            </footer>
+            <footer>
+                <ul class="nav justify-content-center border-bottom bg-light pb-4 mb-0">
+                    <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                </ul>
+                <p class="text-center">
+                    <img src="{{ url_for('static', filename='logo/logo_small_icon_only.png') }}" width="40" height="40" alt=""> 
+                    &copy; 2022 Por Alex Arce, Ing.Agronomo
+                </p>
+        </footer>
         </div>
-        <script src="{{ url_for('static',  filename='js/logica.js') }}"></script>    
-</body>
+    <script src="{{ url_for('static', filename='js/logicSearch.js') }}"></script>
+ </body>
 </html>

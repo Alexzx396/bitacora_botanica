@@ -1,5 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import app, flash
+from flask import app, flash, request
 from werkzeug.utils import secure_filename
 import os
 
@@ -27,40 +27,34 @@ class Bitacora_botanica:
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
     @classmethod
-    def save(cls, data, images=None):
+    def process_images(cls, images):
+        """Procesa una lista de imágenes y devuelve sus URLs."""
         image_urls = []
-
+        for image in images:
+            if image and cls.allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                try:
+                    image.save(image_path)
+                    image_urls.append(filename)
+                except Exception as e:
+                    print(f"Error al guardar la imagen: {e}")
+            else:
+                print(f"Archivo no permitido o no válido: {image.filename}")
+        return image_urls
+    
+    @classmethod
+    def save(cls, data, images=None):
+        """Guarda una nueva entrada de bitácora en la base de datos."""
         if images:
+            image_urls = cls.process_images(images)
+            data['image_url'] = ','.join(image_urls) if image_urls else None
 
-            for image in images:
-                print("Procesando imagen:", image.filename)  # Depuración
-
-                if image and cls.allowed_file(image.filename):
-                    print("Imagen permitida:", image.filename)  # Depuración
-                    filename = secure_filename(image.filename)
-                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-                    try:
-                        image.save(image_path)
-                        image_urls.append(filename)
-                        print("Imagen guardada y añadida a la lista:", filename)  # Depuración
-                    except Exception as e:
-                        print("Error al guardar la imagen:", e)  # Manejo de errores
-                else:
-                    print(f"Archivo no permitido o no válido: {image.filename}")  # Depuración
-                # Concatena los nombres de archivo en una cadena separada por comas
-                print("Filenames antes de unir:", image_urls)
-                data['image_url'] = ','.join(image_urls) if image_urls else None
-                print("Image URLs:", data['image_url'])  # Depuración
-
-
-        # Consulta SQL para insertar los datos
         query = """
         INSERT INTO bitacora_botanica 
         (name, description, lugarobservado, cultivo, bibliografia, Familia, Variedad, date_made, user_id, image_url) 
         VALUES (%(name)s, %(description)s, %(lugarobservado)s, %(cultivo)s, %(bibliografia)s, %(Familia)s, %(Variedad)s, %(date_made)s, %(user_id)s, %(image_url)s);
         """
-        # Intenta ejecutar la consulta SQL y maneja excepciones
         try:
             return connectToMySQL(cls.db_name).query_db(query, data)
         except Exception as e:
@@ -68,16 +62,14 @@ class Bitacora_botanica:
             return None
 
 
+
     @classmethod
     def get_all(cls):
         query = "SELECT * FROM bitacora_botanica;"
         results = connectToMySQL(cls.db_name).query_db(query)
-        all_bitacora_botanica = []
-        for row in results:
-            all_bitacora_botanica.append(cls(row))
-        return all_bitacora_botanica
-    
-    #  buscador de imagenes 
+        return [cls(row) for row in results]
+
+        
     @classmethod
     def get_search(cls, filter):
         query = "SELECT * FROM bitacora_botanica WHERE (name LIKE %%(filter)s) OR (Familia LIKE %%(filter)s) OR (Variedad LIKE %%(filter)s) OR (lugarobservado LIKE %%(filter)s);"
@@ -86,6 +78,7 @@ class Bitacora_botanica:
         for row in results:
             all_bitacora_botanica.append(cls(row))
         return all_bitacora_botanica
+
 
     @classmethod
     def get_one(cls, data):

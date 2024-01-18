@@ -1,32 +1,52 @@
-html {
-    min-height: 100%;
-    position: relative;
-  }
+/* Variables CSS: Colores, sombras, y otros valores reutilizables */
+:root {
+  --color-primary: #4CAF50;
+  --color-secondary: #3E8E41;
+  --text-muted: #666;
+  --footer-background: #f8f9fa;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --border-radius: 10px;
+}
+
+/* Configuración general del cuerpo de la página */
 body {
-    margin: 0;
-    margin-bottom: 40px;
-  }
+  margin: 0;
+  padding-bottom: 40px;
+}
+
+/* Estilos para el footer */
 footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-  }
-
-.logo{
-    margin: 20px;
-    padding:20px;
+  background-color: var(--footer-background);
+  color: var(--text-muted);
+  padding: 20px 0;
+  width: 100%;
+  height: 40px;
+  bottom: 0;
 }
 
-#nav{
-    margin: 10px;
-    padding: 10px;
+/* Estilos para contenedor de logo y alineación */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0; 
 }
+
+.logo {
+  margin: 20px;
+  padding: 20px;
+}
+
+/* Estilos para tarjetas personalizadas */
 .custom-dark-card {
-  background-color:rgb(85, 140, 78) !important; 
-  color: #fff; 
+  background-color: #f5f5f5;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-top: 20px;
 }
 
+/* Estilos para el carrusel */
 .carousel {
   display: flex;
   align-items: center;
@@ -40,21 +60,125 @@ footer {
   font-size: 24px;
   width: 60px;
   height: 60px;
-  background-color: rgb(167, 222, 135) !important;
+  background-color: rgb(167, 222, 135);
   color: #FFFFFF;
   border-radius: 50%;
   border: none;
   opacity: 1;
-  transform: translateY(200px) !important;
+  transform: translateY(200px);
 }
 
 .custom-carousel-control:hover {
   opacity: 0.7;
 }
 
+/* Ajustes de color para iconos del carrusel */
+.carousel .carousel-control-prev-icon,
+.carousel .carousel-control-next-icon {
+  filter: invert(50%);
+}
+
+/* Estilos para títulos de tarjetas */
 .card-title {
-  font-family: 'Arial', sans-serif; 
-  font-size: 60px; 
-  font-weight: bold; 
-  color: white; 
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.card-text {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* Estilos para sección de instrucciones */
+.instrucciones {
+  background-color: var(--footer-background);
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+  text-align: justify;
+}
+
+.instrucciones h3 {
+  color: #007bff;
+}
+
+.instrucciones ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+
+/* Estilos para tablas */
+.table {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.table thead th {
+  padding: 15px;
+}
+
+.table tbody tr:hover {
+  background-color: #f2f2f2;
+}
+
+.table td {
+  padding: 15px;
+  vertical-align: middle;
+}
+
+.table img {
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Estilos para botones estilo botánico */
+.btn-botanico {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 15px;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s;
+}
+
+.btn-botanico:hover, .btn-botanico:focus {
+  background-color: var(--color-secondary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+
+.btn-Especially {
+  padding: 15px 35px;  
+  font-size: 25px;    
+  color: white;       
+  border: none;       
+}
+
+.btn-Especially:hover {
+  color: white;                
+  background-color: #0056b3;    
+}
+
+
+/* Estilos para enlaces de diccionario */
+.link-diccionario {
+  color: white;
+  text-decoration: none;
+}
+
+
+.link-diccionario:hover {
+  color: gainsboro;
+  text-decoration: underline;
 }

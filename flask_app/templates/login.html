@@ -11,7 +11,7 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-light">
-        <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
+        <img class="logo" name="logo" src="{{ url_for('static', filename='logo/logo_small.png') }}" alt="Logo">
     </nav>
     <br><br>
     </div><br><br>
@@ -70,7 +70,7 @@
             <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
             <li class="nav-item"><a href="#" class="nav-link">About</a></li>
         </ul>
-        <p class="text-center"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
+        <p class="text-center">  <img src="{{ url_for('static', filename='logo/logo_small_icon_only.png') }}" width="40" height="40" alt="">  &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
     </footer>
 
 </body>

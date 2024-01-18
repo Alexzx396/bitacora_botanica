@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar navbar-light bg-light justify-content-around">
         <h3  class="text-center"> <a class="navbar-brand" href="#">
-        <img class="logo" name="logo" src="../static/logo/logo_small.png" ></h3>
+        <img class="logo" name="logo" src="{{ url_for('static', filename='logo/logo_small.png') }}" alt="Logo"></h3>
         <div>
             <a href="/registro" class="btn btn-info">Registro</a>
             <a href="/login" class="btn btn-info">Ingreso</a>
@@ -50,7 +50,7 @@
             <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
             <li class="nav-item"><a href="#" class="nav-link">About</a></li>
         </ul>
-        <p class="text-center"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
+        <p class="text-center">  <img src="{{ url_for('static', filename='logo/logo_small_icon_only.png') }}" width="40" height="40" alt="">  &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
     </footer>
     </div>
 </body>

@@ -14,16 +14,16 @@
 <body>
     <nav class="navbar navbar-light bg-light">
         <h3  class="text-center"> <a class="navbar-brand" href="#">
-            <img src="../../static/logo/logo_small_icon_only_inverted.png" width="40" height="40" alt="">
+            <img src="{{ url_for('static', filename='logo/logo_small_icon_only_inverted.png') }}" width="40" height="40" alt="">
             </a> Bienvenido : {{user.first_name}} {{user.last_name}}, </h3>
         <a href="/logout" class="btn btn-info">Salir</a>
     </nav>
-    <div>
-        <center>
-            <a href="/dashboard">
-                <img class="logo" name="logo" src="../static/logo/logo_small.png"></img>
-            </a>
-        </center>
+    <div><br>
+        <div>
+            <div class="logo-container">
+                <img class="logo" name="logo" src="{{ url_for('static', filename='logo/logo_small.png') }}" alt="Logo">
+            </div>
+        </div>
         <div class="container w-50 rounded-5 shadow py-4">
             <form action="/create/bitacora_botanica" method="POST" enctype="multipart/form-data" class="mx-auto">
                 <h2 class="display-6 mx-3">Ingresar Especie</h2><br>
@@ -102,7 +102,7 @@
             <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
             <li class="nav-item"><a href="#" class="nav-link">About</a></li>
         </ul>
-        <p class="text-center"><img src="../static/logo/logo_small_icon_only.png" width="40" height="40" alt=""> &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
+        <p class="text-center">  <img src="{{ url_for('static', filename='logo/logo_small_icon_only.png') }}" width="40" height="40" alt="">  &copy; 2022 Por Alex Arce, Ing.Agronomo</p>
     </footer>
     </div>
 </body>

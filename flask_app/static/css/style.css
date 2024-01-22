@@ -142,6 +142,17 @@ footer {
 }
 
 /* Estilos para botones estilo botánico */
+.btn-delete {
+  background-color: var(--color-primary);
+  color: red !important;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 15px;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s;
+}
+
+
 .btn-botanico {
   background-color: var(--color-primary);
   color: white;
@@ -152,11 +163,13 @@ footer {
   transition: all 0.3s;
 }
 
-.btn-botanico:hover, .btn-botanico:focus {
+.btn-botanico:hover, .btn-botanico:focus  {
   background-color: var(--color-secondary);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   color: #fff;
 }
+
+
 
 .btn-Especially {
   padding: 15px 35px;  
@@ -171,6 +184,7 @@ footer {
 }
 
 
+
 /* Estilos para enlaces de diccionario */
 .link-diccionario {
   color: white;
@@ -182,3 +196,25 @@ footer {
   color: gainsboro;
   text-decoration: underline;
 }
+
+/* ajustes card dashboards */
+.card {
+  width: 95%;
+  height: 100%;
+  padding: 25px;
+}
+
+.image-container {
+  width: 100%; 
+  text-align: center;
+  margin-bottom: 20px; 
+}
+
+.image-container img {
+  max-width: 100%; 
+  max-height: 400px; 
+  object-fit: cover; 
+}
+
+
+

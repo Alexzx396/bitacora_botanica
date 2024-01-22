@@ -29,7 +29,11 @@
                 <h5 class="card-title display-3 text-center">Especie: {{ bitacora_botanica.name }}</h5><br><br>
                 <p class="card-text fs-4">Familia: {{ bitacora_botanica.Familia }}</p>
                 <p class="card-text fs-4">Variedad: {{ bitacora_botanica.Variedad }}</p>
-                <p class="card-text fs-4">Fecha de Clasificación: {{ bitacora_botanica.date_made.strftime('%Y-%m-%d') }}</p>
+                <p class="card-text fs-4">Fecha de Clasificación: 
+                 {% if bitacora_botanica.date_made%}
+                        {{ bitacora_botanica.date_made}}
+                {% endif %}
+                </p>
                 <p class="card-text fs-4">Lugar Observado: {{ bitacora_botanica.lugarobservado }}</p>
                 <p class="card-text fs-4">Cultivo: {{ bitacora_botanica.cultivo }}</p>
                 <p class="card-text fs-4">Descripción: {{ bitacora_botanica.description }}</p>

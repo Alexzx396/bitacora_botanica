@@ -3,6 +3,7 @@ from flask_app import app
 from flask_app.models.bitacora_botanica import Bitacora_botanica
 from flask_app.models.user import User
 from werkzeug.utils import secure_filename
+from datetime import datetime
 import os
 
 # Funciones Auxiliares
@@ -75,17 +76,30 @@ def create_bitacora_botanica():
 def edit_bitacora_botanica(id):
     if not is_logged_in():
         return redirect('/logout')
-    data = {"id": id}
-    return render_template("edit_bitacora_botanica.html", edit=Bitacora_botanica.get_one(data), user=User.get_by_id(get_user_data()))
+
+    # Obtener los datos de la bitácora botánica a editar
+    bitacora_data = Bitacora_botanica.get_one({"id": id})
+
+    # Verificar si se encontró la entrada de la bitácora botánica
+    if not bitacora_data:
+        flash("Bitácora botánica no encontrada.", "error")
+        return redirect(url_for('dashboard'))
+
+    # Obtener los datos del usuario actual para mostrar en la interfaz
+    user_data = User.get_by_id(get_user_data())
+
+    return render_template("edit_bitacora_botanica.html", edit=bitacora_data, user=user_data)
+
 
 @app.route('/update/bitacora_botanica', methods=['POST'])
 def update_bitacora_botanica():
     if not is_logged_in():
         return redirect('/logout')
-    if not Bitacora_botanica.validate_bitacora_botanica(request.form):
-        return redirect(url_for('edit_bitacora_botanica', id=request.form['id']))
+
+    filenames = process_uploaded_images(request.files.getlist('imagenes[]'))
 
     data = {
+        "id": request.form['id'],
         "name": request.form["name"],
         "description": request.form["description"],
         "lugarobservado": request.form["lugarobservado"],
@@ -94,12 +108,13 @@ def update_bitacora_botanica():
         "Familia": request.form["Familia"],
         "Variedad": request.form["Variedad"],
         "date_made": request.form["date_made"],
-        "id": request.form['id'],
-        "image_url": request.form['image_url']
-        
+        "image_url": ','.join(filenames),
     }
+
     Bitacora_botanica.update(data)
     return redirect(url_for('dashboard'))
+
+
 
 @app.route('/bitacora_botanica/<int:id>')
 def show_bitacora_botanica(id):
@@ -115,6 +130,23 @@ def destroy_bitacora_botanica(id):
     data = {"id": id}
     Bitacora_botanica.destroy(data)
     return redirect(url_for('dashboard'))
+
+@app.route('/alguna_ruta')
+def alguna_funcion():
+    # Obtener los datos de bitacora_botanica
+    bitacoras = Bitacora_botanica.get_all()  # o cualquier método que estés usando
+
+    # Formatear la fecha de cada bitacora
+    for bitacora in bitacoras:
+        bitacora.date_made = Bitacora_botanica.format_date(bitacora.date_made)
+    
+    return render_template('tu_plantilla.html', bitacora_botanica=bitacoras)
+
+
+
+
+
+
 
 
 

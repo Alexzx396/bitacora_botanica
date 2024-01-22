@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="container w-50 rounded-5 shadow py-4">
-        <form action="/update/bitacora_botanica" method="post" class="mx-auto" >
+        <form action="/update/bitacora_botanica" method="POST" enctype="multipart/form-data" class="mx-auto">
             <h2 class="display-6 mx-3">Editar Especie</h2><br>
             {% with messages = get_flashed_messages(category_filter=['bitacora_botanica']) %}
                 {% if messages %}
@@ -53,7 +53,7 @@
                     </div>
                     <div class="form-group pb-3">
                         <label for="date_made">Fecha de Clasificacion:</label>
-                        <input type="date" name="date_made" value="{{edit.date_made.strftime('%Y-%m-%d')}}" class="form-control">
+                        <input type="date" name="date_made" value="{{edit.date_made}}" class="form-control">
                     </div>
                     <div class="form-group pb-3">
                         <label for="lugarobservado">Lugar observado:</label>
@@ -61,27 +61,32 @@
                     </div>
                     <div class="form-group pb-3">
                         <label for="cultivo">Cultivo:</label>
-                        <textarea name="cultivo"  cols="10" rows="5" value="{{edit.cultivo}}"  class="form-control" ></textarea>
+                        <textarea name="cultivo"  cols="10" rows="5" value="{{edit.cultivo}}" class="form-control" >{{edit.cultivo}}</textarea>
                     </div>
                     <div class="form-group pb-3">
                         <label for="bibliografia">Bibliografia:</label>
-                        <textarea name="bibliografia"  cols="10" rows="5" value="{{edit.bibliografia}}" class="form-control" ></textarea>
+                        <textarea name="bibliografia"  cols="10" rows="5" value="{{edit.bibliografia}}" class="form-control" >{{edit.bibliografia}}</textarea>
                     </div>
                     <div class="form-group pb-3">
                         <label for="description">Descripcion:</label>
-                        <textarea name="description"  cols="40" rows="5" value="{{edit.description}}" class="form-control" ></textarea>
+                        <textarea name="description" cols="40" rows="5" class="form-control">{{edit.description}}</textarea>
                     </div>
                     <!-- Visualización y cambio de la imagen -->
-                    <div class="form-group pb-3">
-                        {% if edit.image_url %}
-                            <img src="{{ url_for('uploads', filename=edit.image_url) }}" alt="Imagen Actual" class="img-fluid" multiple>
-                        {% else %}
-                            <p>No hay imagen actualmente.</p>
-                        {% endif %}
-                        <input type="file" name="image_url" id="imagen" class="form-control" value="{{edit.image_url}}">
-                    </div>
-                    <br>
-                    <input type="submit" value="Aceptar" class="btn btn-primary">
+                        <div class="form-group pb-3">
+                            {% if edit.image_url %}
+                                {% for url in edit.image_url.split(',') %}
+                                    <img src="{{ url_for('uploads', filename=url) }}" alt="" class="img-fluid">
+                                {% endfor %}
+                                <input type="hidden" name="image_url_existing" value="{{ edit.image_url }}">
+                            {% else %}
+                                <p>No hay imagen actualmente.</p>
+                            {% endif %}
+                            <label for="imagenes">Cambiar o Añadir Imágenes:</label>
+                            <input type="file" name="imagenes[]" id="imagenes" class="form-control" multiple accept="image/*">
+                            <small class="form-text text-muted">Seleccione múltiples imágenes usando la tecla Ctrl o Shift.</small>
+                        </div>
+                        <br>
+                    <input type="submit" value="Subir" class="btn btn-primary">
                 </div>
             </div>
             

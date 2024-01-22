@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import app, flash, request
+from flask import app, flash, render_template
+from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 
@@ -64,12 +65,49 @@ class Bitacora_botanica:
 
 
     @classmethod
+    def format_date(cls, date):
+        if isinstance(date, datetime):
+            # Si date ya es un objeto datetime, solo formatearlo
+            return date.strftime('%d-%m-%Y')
+        elif isinstance(date, str):
+            # Si date es una cadena, convertirla a datetime y luego formatearla
+            try:
+                return datetime.strptime(date, '%d-%m-%Y').strftime('%d-%m-%Y')
+            except ValueError:
+                # Manejar el error si la fecha no está en el formato esperado
+                return None
+        else:
+            # Si date no es ni datetime ni cadena, devolver None o manejar de otra manera
+            return None
+
+    @classmethod
     def get_all(cls):
         query = "SELECT * FROM bitacora_botanica;"
         results = connectToMySQL(cls.db_name).query_db(query)
-        return [cls(row) for row in results]
+        bitacoras = []
+        for row in results:
+            bitacora = cls(row)
+            if isinstance(bitacora.date_made, str):
+                try:
+                    bitacora.date_made = datetime.strptime(bitacora.date_made, '%d-%m--%Y')
+                except ValueError:
+                    bitacora.date_made = None 
+            bitacoras.append(bitacora)
+        return bitacoras
 
-        
+
+    @classmethod
+    def get_one(cls, data):
+        query = "SELECT * FROM bitacora_botanica WHERE id = %(id)s;"
+        results = connectToMySQL(cls.db_name).query_db(query, data)
+        if results:
+            bitacora = cls(results[0])
+            bitacora.date_made = cls.format_date(bitacora.date_made)
+            return bitacora
+        return None
+    
+
+    
     @classmethod
     def get_search(cls, filter):
         query = "SELECT * FROM bitacora_botanica WHERE (name LIKE %%(filter)s) OR (Familia LIKE %%(filter)s) OR (Variedad LIKE %%(filter)s) OR (lugarobservado LIKE %%(filter)s);"
@@ -81,45 +119,41 @@ class Bitacora_botanica:
 
 
     @classmethod
-    def get_one(cls, data):
-        query = "SELECT * FROM bitacora_botanica WHERE id = %(id)s;"
-        results = connectToMySQL(cls.db_name).query_db(query, data)
-        if results:
-            return cls(results[0])
-        return None
-
-    @classmethod
-    def update(cls, data, new_images=None):
-        image_urls = data['image_url'].split(',') if data['image_url'] else []
-        print("URLs de imagen existentes:", image_urls)  # Depuración
-
-        if new_images:
-            for new_image in new_images:
-                if new_image and cls.allowed_file(new_image.filename):
-                    filename = secure_filename(new_image.filename)
-                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    try:
-                        new_image.save(image_path)
-                        image_urls.append(filename)
-                        print("Imagen guardada:", filename)  # Depuración
-                    except Exception as e:
-                        print("Error al guardar la imagen:", e)  # Manejo de errores
-                else:
-                    if new_image:
-                        print("Archivo no permitido o no válido:", new_image.filename)  # Depuración
-
-        data['image_url'] = ','.join(image_urls)
-        print("URLs de imagen actualizadas:", data['image_url'])  # Depuración
-
-        query = "UPDATE bitacora_botanica SET name = %(name)s, description = %(description)s, lugarobservado = %(lugarobservado)s, cultivo = %(cultivo)s, bibliografia = %(bibliografia)s, Familia = %(Familia)s, Variedad = %(Variedad)s, date_made = %(date_made)s, image_url = %(image_url)s, updated_at = NOW() WHERE id = %(id)s;"
+    def update(cls, data):
+        query = """
+        UPDATE bitacora_botanica 
+        SET name = %(name)s, 
+            description = %(description)s, 
+            lugarobservado = %(lugarobservado)s, 
+            cultivo = %(cultivo)s, 
+            bibliografia = %(bibliografia)s, 
+            Familia = %(Familia)s, 
+            Variedad = %(Variedad)s, 
+            date_made = %(date_made)s, 
+            image_url = %(image_url)s, 
+            updated_at = NOW() 
+        WHERE id = %(id)s;
+        """
         return connectToMySQL(cls.db_name).query_db(query, data)
-
-
     
+    @classmethod
+    def process_images(cls, images):
+        image_urls = []
+        for image in images:
+            if image and cls.allowed_file(image.filename):
+                filename = secure_filename(image.filename)
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)  
+                image.save(image_path)
+                image_urls.append(filename)
+        return image_urls
+
+
     @classmethod
     def destroy(cls, data):
         query = "DELETE FROM bitacora_botanica WHERE id = %(id)s;"
         return connectToMySQL(cls.db_name).query_db(query, data)
+    
+
 
     @staticmethod
     def validate_bitacora_botanica(bitacora_botanica):

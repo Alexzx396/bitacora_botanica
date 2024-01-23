@@ -37,7 +37,7 @@
                 {% endif %}
             {% endwith %}
             <div class="d-flex justify-content-center my-4">
-                <input class="form-control form-control-lg" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar especies que has subido...">
+                <input class="form-control form-control-lg" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar ...">
                 <a id="buscarBtn" class="btn btn-primary btn-lg custom-btn" value="search">Buscador</a>
             </div>
         </form>
@@ -70,8 +70,9 @@
         <br><br><br>
 
        <!-- Sección de Últimas Card Subidas -->
+        <!-- Sección de Últimas Card Subidas -->
         <div class="container my-4 col-11 ">
-            <h1 class="text-center mb-4">Últimas Card Subidas Por Usuarios</h1>
+            <h1 class="text-center mb-4">Últimos Aportes</h1>
             <div class="row">
                 {% for bitacora_botanica in bitacora_botanica %}
                     <div class="col-md-4 mb-5">
@@ -85,7 +86,6 @@
                                             {% for url in image_urls %}
                                                 <div class="carousel-item {% if loop.first %}active{% endif %}">
                                                         <img src="{{ url_for('static', filename='uploads/' + url) }}" class="d-block w-100" alt="Imagen de la especie">
-                                                    
                                                 </div>
                                             {% endfor %}
                                         {% else %}
@@ -93,13 +93,12 @@
                                         {% endif %}
                                     </div>
                                 </div> <br><br>
-                                    
-                                    <p class="card-text">Variedad: {{ bitacora_botanica.Variedad }}</p>
-                                    <p class="card-text">Familia: {{ bitacora_botanica.Familia }}</p>
-                                    <p class="card-text">Autor: {{ bitacora_botanica.bibliografia }}</p>
+                                <p class="card-text">Variedad: {{ bitacora_botanica.Variedad }}</p>
+                                <p class="card-text">Familia: {{ bitacora_botanica.Familia }}</p>
+                                <p class="card-text">Autor: {{ bitacora_botanica.bibliografia }}</p>
                             </div>
                             <div class="card-footer">
-                                <a href="/bitacora_botanica/{{ bitacora_botanica.id }}" class="btn btn-primary w-100">Ver Tarjeta</a>
+                                <a href="/bitacora_botanica/{{ bitacora_botanica.id }}" class="btn btn-primary w-100">Ver</a>
                             </div>
                         </div>
                     </div>
@@ -108,10 +107,8 @@
                     {% endif %}
                 {% endfor %}
             </div>
-        </div> <br><br>
+        </div><br><br>
 
-
-        
         <table class="table table-hover col-9 mx-auto">
             <h4 class="table-hover col-9 mx-auto"></a> {{user.first_name}}, Chequea tus colaboraciones</h4><br>
             <thead>

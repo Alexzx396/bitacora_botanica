@@ -6,6 +6,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 
+
+
 # Funciones Auxiliares
 def allowed_file(filename):
     allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
@@ -84,6 +86,13 @@ def edit_bitacora_botanica(id):
     if not bitacora_data:
         flash("Bitácora botánica no encontrada.", "error")
         return redirect(url_for('dashboard'))
+    
+    # Formatear la fecha para mostrar en el formulario
+    if bitacora_data.date_made and isinstance(bitacora_data.date_made, str):
+        try:
+            bitacora_data.date_made = datetime.strptime(bitacora_data.date_made, '%d-%m-%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            flash("Formato de fecha no válido.", "error")
 
     # Obtener los datos del usuario actual para mostrar en la interfaz
     user_data = User.get_by_id(get_user_data())
@@ -96,23 +105,36 @@ def update_bitacora_botanica():
     if not is_logged_in():
         return redirect('/logout')
 
-    filenames = process_uploaded_images(request.files.getlist('imagenes[]'))
+    # Obtener los datos actuales
+    current_data = Bitacora_botanica.get_one({'id': request.form['id']})
 
+    # Procesar las imágenes cargadas
+    new_filenames = process_uploaded_images(request.files.getlist('imagenes[]'))
+    if new_filenames:
+        image_urls = ','.join(new_filenames)
+    else:
+        # Mantener las imágenes existentes si no se cargan nuevas
+        image_urls = request.form.get('image_url_existing', '')
+
+   # Procesar la fecha
+    new_date = request.form['date_made'] or current_data.date_made
+
+    # Actualizar los datos
     data = {
-        "id": request.form['id'],
-        "name": request.form["name"],
-        "description": request.form["description"],
-        "lugarobservado": request.form["lugarobservado"],
-        "cultivo": request.form["cultivo"],
-        "bibliografia": request.form["bibliografia"],
-        "Familia": request.form["Familia"],
-        "Variedad": request.form["Variedad"],
-        "date_made": request.form["date_made"],
-        "image_url": ','.join(filenames),
+        'id': request.form['id'],
+        'name': request.form['name'],
+        'Familia': request.form['Familia'],
+        'Variedad': request.form['Variedad'],
+        'date_made': new_date,
+        'lugarobservado': request.form['lugarobservado'],
+        'cultivo': request.form['cultivo'],
+        'bibliografia': request.form['bibliografia'],
+        'description': request.form['description'],
+        'image_url': image_urls,
     }
-
     Bitacora_botanica.update(data)
     return redirect(url_for('dashboard'))
+
 
 
 
@@ -130,18 +152,6 @@ def destroy_bitacora_botanica(id):
     data = {"id": id}
     Bitacora_botanica.destroy(data)
     return redirect(url_for('dashboard'))
-
-@app.route('/alguna_ruta')
-def alguna_funcion():
-    # Obtener los datos de bitacora_botanica
-    bitacoras = Bitacora_botanica.get_all()  # o cualquier método que estés usando
-
-    # Formatear la fecha de cada bitacora
-    for bitacora in bitacoras:
-        bitacora.date_made = Bitacora_botanica.format_date(bitacora.date_made)
-    
-    return render_template('tu_plantilla.html', bitacora_botanica=bitacoras)
-
 
 
 

@@ -1,5 +1,5 @@
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import app, flash, render_template
+from flask import app, flash, current_app
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
@@ -72,7 +72,7 @@ class Bitacora_botanica:
         elif isinstance(date, str):
             # Si date es una cadena, convertirla a datetime y luego formatearla
             try:
-                return datetime.strptime(date, '%d-%m-%Y').strftime('%d-%m-%Y')
+                return datetime.strptime(date, '%Y-%m-%d').strftime('%d-%m-%Y')
             except ValueError:
                 # Manejar el error si la fecha no está en el formato esperado
                 return None
@@ -89,7 +89,7 @@ class Bitacora_botanica:
             bitacora = cls(row)
             if isinstance(bitacora.date_made, str):
                 try:
-                    bitacora.date_made = datetime.strptime(bitacora.date_made, '%d-%m--%Y')
+                    bitacora.date_made = datetime.strptime(bitacora.date_made, '%Y-%m-%d').strftime('%d-%m-%Y')
                 except ValueError:
                     bitacora.date_made = None 
             bitacoras.append(bitacora)
@@ -105,7 +105,6 @@ class Bitacora_botanica:
             bitacora.date_made = cls.format_date(bitacora.date_made)
             return bitacora
         return None
-    
 
     
     @classmethod
@@ -150,9 +149,20 @@ class Bitacora_botanica:
 
     @classmethod
     def destroy(cls, data):
+        # Primero, obtenemos la URL de las imágenes
+        bitacora = cls.get_one(data)
+        if bitacora and bitacora.image_url:
+            # Separar las URLs de las imágenes y eliminar cada imagen
+            for img_filename in bitacora.image_url.split(','):
+                img_path = os.path.join(current_app.config['UPLOAD_FOLDER'], img_filename)
+                if os.path.exists(img_path):
+                    os.remove(img_path)
+        # Ahora, eliminamos la entrada de la base de datos
         query = "DELETE FROM bitacora_botanica WHERE id = %(id)s;"
         return connectToMySQL(cls.db_name).query_db(query, data)
     
+
+        
 
 
     @staticmethod

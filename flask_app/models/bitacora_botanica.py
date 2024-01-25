@@ -117,6 +117,7 @@ class Bitacora_botanica:
         return all_bitacora_botanica
 
 
+
     @classmethod
     def update(cls, data):
         query = """
@@ -161,8 +162,64 @@ class Bitacora_botanica:
         query = "DELETE FROM bitacora_botanica WHERE id = %(id)s;"
         return connectToMySQL(cls.db_name).query_db(query, data)
     
-
+    @classmethod
+    def get_paginated_entries(cls, page, per_page=12):
+        # Calcula el índice de inicio para la página actual
+        start = (page - 1) * per_page
+        query = f"SELECT * FROM bitacora_botanica ORDER BY created_at DESC LIMIT {start}, {per_page};"
+        results = connectToMySQL(cls.db_name).query_db(query)
         
+        # Convierte los resultados en objetos de bitacora_botanica
+        bitacoras = [cls(row) for row in results] if results else []
+
+        # Consulta para obtener el total de entradas
+        count_query = "SELECT COUNT(*) AS total FROM bitacora_botanica;"
+        total_results = connectToMySQL(cls.db_name).query_db(count_query)
+        total_entries = total_results[0]['total'] if total_results else 0
+
+        # Calcula el número total de páginas
+        total_pages = (total_entries + per_page - 1) // per_page
+
+        return bitacoras, total_pages
+
+    @classmethod
+    def get_user_collaborations(cls, data):
+        # Query para obtener todas las bitácoras botánicas del usuario específico
+        query = "SELECT * FROM bitacora_botanica WHERE user_id = %(user_id)s;"
+        
+        # Ejecutar la consulta en la base de datos
+        results = connectToMySQL(cls.db_name).query_db(query, data)
+
+        # Crear una lista para almacenar las colaboraciones del usuario
+        collaborations = []
+
+        # Si hay resultados, convertir cada fila en un objeto de Bitacora_botanica
+        if results:
+            for row in results:
+                collaborations.append(cls(row))
+
+        # Devolver la lista de colaboraciones
+        return collaborations
+    
+    # metodo de rutas para funciones de catalogar a travez de las familias en los diccionarios
+    @classmethod
+    def get_by_family(cls, familia, page, per_page=12):
+        # Calcula el índice de inicio para la consulta con paginación
+        start = (page - 1) * per_page
+        query = "SELECT * FROM bitacora_botanica WHERE Familia = %(familia)s ORDER BY created_at DESC LIMIT %(start)s, %(per_page)s;"
+        params = {'familia': familia, 'start': start, 'per_page': per_page}
+        results = connectToMySQL(cls.db_name).query_db(query, params)
+        especies = [cls(row) for row in results] if results else []
+        return especies
+    
+    @classmethod
+    def calculate_total_pages_familia(cls, familia, per_page=12):
+        query = "SELECT COUNT(*) AS total FROM bitacora_botanica WHERE Familia = %(familia)s;"
+        results = connectToMySQL(cls.db_name).query_db(query, {'familia': familia})
+        total_entries = results[0]['total'] if results else 0
+        total_pages = (total_entries + per_page - 1) // per_page
+        return total_pages
+
 
 
     @staticmethod

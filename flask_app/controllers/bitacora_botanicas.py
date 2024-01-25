@@ -41,14 +41,17 @@ def new_bitacora_botanica():
         return redirect('/logout')
     return render_template('new_bitacora_botanica.html', user=User.get_by_id(get_user_data()))
 
-@app.route('/search/bitacora_filter/<string:planta>')
-def search_bitacora_filter(planta):  
-    # Muestra los resultados en 'dashboard.html'.
-    if 'user_id' not in session:
+@app.route('/search/bitacora_filter', methods=['POST'])
+def search_bitacora_filter():
+    if not is_logged_in():
         return redirect('/logout')
-    data = {"id": session['user_id']}
-    filter = {"id": planta}
-    return render_template("dashboard.html", user=User.get_by_id(data), bitacora_botanica=Bitacora_botanica.get_search(filter))
+    
+    planta = request.form.get('busquedaDiccionarios')
+    user_data = User.get_by_id({"id": session['user_id']})
+    search_results = Bitacora_botanica.get_search({'id': planta})
+    user_collaborations = Bitacora_botanica.get_user_collaborations({"user_id": session["user_id"]})
+
+    return render_template("dashboard.html", user=user_data, bitacoras=search_results, search_mode=True, user_collaborations=user_collaborations)
 
 
 
@@ -136,8 +139,6 @@ def update_bitacora_botanica():
     return redirect(url_for('dashboard'))
 
 
-
-
 @app.route('/bitacora_botanica/<int:id>')
 def show_bitacora_botanica(id):
     if not is_logged_in():
@@ -154,6 +155,52 @@ def destroy_bitacora_botanica(id):
     return redirect(url_for('dashboard'))
 
 
+@app.route('/dashboard')
+@app.route('/dashboard/page/<int:page>')
+def dashboard_pages(page=1):
+    if not is_logged_in():
+        return redirect('/logout')
+    
+    # Obtener colaboraciones del usuario
+    user_collaborations = Bitacora_botanica.get_user_collaborations({"user_id": session["user_id"]})
+
+    # Paginación para todas las bitácoras botánicas
+    bitacoras, total_pages = Bitacora_botanica.get_paginated_entries(page=page, per_page=12)
+
+    user_data = User.get_by_id(get_user_data())
+
+    return render_template(
+        "dashboard.html",
+        user=user_data,
+        bitacoras=bitacoras,
+        user_collaborations=user_collaborations,
+        current_page=page,
+        total_pages=total_pages
+    )
+
+
+# metodo de rutas para funciones de catalogar a travez de las familias en los diccionarios
+@app.route('/diccionario_familia/<string:familia>')
+def diccionario_familia(familia):
+    page = request.args.get('page', 1, type=int)
+    per_page = 12 
+    
+    user_data = User.get_by_id(get_user_data())
+    bitacoras = Bitacora_botanica.get_by_family(familia, page, per_page=per_page)
+    total_pages = Bitacora_botanica.calculate_total_pages_familia(familia, per_page=12)
+
+    # Obtener colaboraciones del usuario
+    user_collaborations = Bitacora_botanica.get_user_collaborations({"user_id": session["user_id"]})
+
+    return render_template(
+        "dashboard.html",
+        user=user_data,
+        bitacoras=bitacoras,
+        user_collaborations = user_collaborations,
+        current_page=page,
+        total_pages=total_pages,
+        familia = familia
+    )
 
 
 

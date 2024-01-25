@@ -23,25 +23,29 @@
             <img class="logo" name="logo" src="{{ url_for('static', filename='logo/logo_small.png') }}" alt="Logo">
         </div>
     </div>
-    <!-- Buscador -->
-    <div class="row my-3">
-        <form class="col-12 col-md-8 offset-md-2" action="/buscador" method="post">
-            {% with messages = get_flashed_messages(category_filter=['buscador']) %}
-            {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    <strong>NOOOOOOO!!!!</strong>
+
+
+        <!-- Buscador -->
+
+        <div class="row my-3">
+            <form class="col-12 col-md-8 offset-md-2" action="/search/bitacora_filter" method="post">
+                {% with messages = get_flashed_messages(category_filter=['buscador']) %}
+                {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error en la búsqueda:</strong>
                         {% for message in messages %}
-                        <p>{{message}}</p>
+                            <p>{{message}}</p>
                         {% endfor %}
-                </div>
+                    </div>
                 {% endif %}
-            {% endwith %}
-            <div class="d-flex justify-content-center my-4">
-                <input class="form-control form-control-lg" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar ...">
-                <a id="buscarBtn" class="btn btn-primary btn-lg custom-btn" value="search">Buscador</a>
-            </div>
-        </form>
-    </div><br><br>
+                {% endwith %}
+                <div class="d-flex justify-content-center my-4">
+                    <input class="form-control form-control-lg" id="buscarInput" type="text" name="busquedaDiccionarios" placeholder="Buscar ...">
+                    <button type="submit" class="btn btn-primary btn-lg custom-btn">Buscar</button>
+                </div>
+            </form>
+        </div><br><br>
+
 
 
     
@@ -69,20 +73,19 @@
         </div>
         <br><br><br>
 
-       <!-- Sección de Últimas Card Subidas -->
         <!-- Sección de Últimas Card Subidas -->
         <div class="container my-4 col-11 ">
             <h1 class="text-center mb-4">Últimos Aportes</h1>
             <div class="row">
-                {% for bitacora_botanica in bitacora_botanica %}
+                {% for bitacora in bitacoras %}
                     <div class="col-md-4 mb-5">
                         <div class="card shadow custom-dark-card" >
                             <div class="card-body">
-                                <h5 class="card-title text-center">{{ bitacora_botanica.name }}</h5><br><br>
+                                <h5 class="card-title text-center">{{ bitacora.name }}</h5><br><br>
                                 <div id="bitacoraBotanicaCarousel{{ loop.index }}" class="img image-container carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
-                                        {% if bitacora_botanica.image_url %}
-                                            {% set image_urls = bitacora_botanica.image_url.split(',') %}
+                                        {% if bitacora.image_url %}
+                                            {% set image_urls = bitacora.image_url.split(',') %}
                                             {% for url in image_urls %}
                                                 <div class="carousel-item {% if loop.first %}active{% endif %}">
                                                         <img src="{{ url_for('static', filename='uploads/' + url) }}" class="d-block w-100" alt="Imagen de la especie">
@@ -93,86 +96,97 @@
                                         {% endif %}
                                     </div>
                                 </div> <br><br>
-                                <p class="card-text">Variedad: {{ bitacora_botanica.Variedad }}</p>
-                                <p class="card-text">Familia: {{ bitacora_botanica.Familia }}</p>
-                                <p class="card-text">Autor: {{ bitacora_botanica.bibliografia }}</p>
+                                <p class="card-text">Variedad: {{ bitacora.Variedad }}</p>
+                                <p class="card-text">Familia: {{ bitacora.Familia }}</p>
+                                <p class="card-text">Autor: {{ bitacora.bibliografia }}</p>
                             </div>
                             <div class="card-footer">
-                                <a href="/bitacora_botanica/{{ bitacora_botanica.id }}" class="btn btn-primary w-100">Ver</a>
+                                <a href="/bitacora_botanica/{{ bitacora.id }}" class="btn btn-primary w-100">Ver</a>
                             </div>
                         </div>
                     </div>
                     {% if loop.index % 3 == 0 %}
                         </div><div class="row">
                     {% endif %}
-                {% endfor %}
-            </div>
+            {% endfor %}
+            </div><br><br>
+            <!-- Controles de paginación -->
+            {% if not search_mode %}
+                <div class="pagination">
+                    {% if current_page > 1 %}
+                        <a href="{{ url_for('dashboard_pages', page=current_page-1) }}" class="btn btn-info mb-10 col-2 mx-auto">Anterior</a>
+                    {% endif %}
+                    <hr>
+                    {% if current_page < total_pages %}
+                        <a href="{{ url_for('dashboard_pages', page=current_page+1) }}" class="btn btn-info mb-10 col-2 mx-auto">Siguiente</a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div><br><br>
 
-        <table class="table table-hover col-9 mx-auto">
-            <h4 class="table-hover col-9 mx-auto"></a> {{user.first_name}}, Chequea tus colaboraciones</h4><br>
-            <thead>
-                <tr>
-                    <th>Especie</th>
-                    <th>Familia</th>
-                    <th>Variedad</th>
-                    <th>Fecha de Calsificacion</th>
-                    <th>Imagen</th>
-                    <th>Accion</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for bitacora_botanica in bitacora_botanica %}
-                    <tr>
-                        {% if bitacora_botanica.user_id == session.user_id %}
-                        <td>{{bitacora_botanica.name}}</td>
-                        <td>{{bitacora_botanica.Familia}}</td>
-                        <td>{{bitacora_botanica.Variedad}}</td>
-                        <td>
-                        {% if bitacora_botanica.date_made %}
-                            {{ bitacora_botanica.date_made.strftime('%m-%d-%Y') }}
+
+    <table class="table col-9 mx-auto">
+    <h4 class="table-hover col-9 mx-auto">{{user.first_name}}, Chequea tus colaboraciones</h4><br>
+    <thead class="thead-dark">
+        <tr>
+            <th>Especie</th>
+            <th>Familia</th>
+            <th>Variedad</th>
+            <th>Fecha de Clasificación</th>
+            <th>Imagen</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for colaboracion in user_collaborations %}
+            <tr>
+                <td>{{colaboracion.name}}</td>
+                <td>{{colaboracion.Familia}}</td>
+                <td>{{colaboracion.Variedad}}</td>
+                <td>
+                    {% if colaboracion.date_made %}
+                        {{ colaboracion.date_made.strftime('%d-%m-%Y') }}
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+                <td>
+                    {% if colaboracion.image_url %}
+                        {% set image_urls = colaboracion.image_url.split(',') %}
+                        {% if image_urls[0] %}
+                            <img src="{{ url_for('static', filename='uploads/' + image_urls[0]) }}" class="img-fluid" width="35" height="40">
                         {% else %}
-                            No disponible
+                            <p>No hay imagen disponible.</p>
                         {% endif %}
-                        </td>
-                        <td>
-                            {% if bitacora_botanica.image_url %}
-                                {% set image_urls = bitacora_botanica.image_url.split(',') %}
-                                {% if image_urls[0] %}
-                                    <img src="{{ url_for('static', filename='uploads/' + image_urls[0]) }}" class="img-fluid" width="35" height="40">
-                                {% else %}
-                                    <p>No hay imagen disponible.</p>
-                                {% endif %}
-                            {% else %}
-                                <p>No hay imagen disponible.</p>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a class="btn btn-botanico" href="/bitacora_botanica/{{bitacora_botanica.id}}">Ver Tarjeta</a>
-                            <a class="btn btn-botanico" href="/edit/bitacora_botanica/{{bitacora_botanica.id}}">Editar</a>
-                            <a class="btn btn-botanico btn-delete" onclick="confirmDelete('{{ bitacora_botanica.id }}')">Borrar</a>
-                        </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
+                    {% else %}
+                        <p>No hay imagen disponible.</p>
+                    {% endif %}
+                </td>
+                <td>
+                    <a class="btn btn-botanico" href="/bitacora_botanica/{{colaboracion.id}}">Ver Tarjeta</a>
+                    <a class="btn btn-botanico" href="/edit/bitacora_botanica/{{colaboracion.id}}">Editar</a>
+                    <a class="btn btn-botanico btn-delete" onclick="confirmDelete('{{ colaboracion.id }}')">Borrar</a>
+                </td>
+            </tr>
+        {% endfor %}
             </tbody>
         </table>
+
         <br><br>
         <h4 class="text-center mb-3">Diccionarios Disponibles</h4>
-        <div class="table table-hover col-8 mx-auto">
-            <table class="table table-hover mx-auto">
+        <div class="table-responsive">
+            <table class="table col-9 table-hover mx-auto">
                 <thead>
                     <tr>
-                        <th><a href="#" class="link-diccionario">Suculenta</a></th>
-                        <th><a href="#" class="link-diccionario">CactusSuculenta</a></th>
-                        <th><a href="#" class="link-diccionario">Hortalizas</a></th>
-                        <th><a href="#" class="link-diccionario">Herbaceas</a></th>
-                        <th><a href="#" class="link-diccionario">Frutales</a></th>
-                        <th><a href="#" class="link-diccionario">Bulbosas</a></th>
-                        <th><a href="#" class="link-diccionario">Geofitas</a></th>
-                        <th><a href="#" class="link-diccionario">Hongos</a></th>
-                        <th><a href="#" class="link-diccionario">Medicinales</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Suculentas') }}" class="link-diccionario">Suculentas</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Cactus') }}" class="link-diccionario">Cactus</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Hortalizas') }}" class="link-diccionario">Hortalizas</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Herbaceas') }}" class="link-diccionario">Herbaceas</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Frutales') }}" class="link-diccionario">Frutales</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Bulbosas') }}" class="link-diccionario">Bulbosas</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Geofitas') }}" class="link-diccionario">Geofitas</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Hongos') }}" class="link-diccionario">Hongos</a></th>
+                        <th><a href="{{ url_for('diccionario_familia', familia='Medicinales') }}" class="link-diccionario">Medicinales</a></th>
                     </tr>
                 </thead>
             </table>
@@ -188,7 +202,7 @@
                 </ul>
                 <p class="text-center">
                     <img src="{{ url_for('static', filename='logo/logo_small_icon_only.png') }}" width="40" height="40" alt=""> 
-                    &copy; 2022 Por Alex Arce, Ing.Agronomo
+                    &copy; 2023 Por Alex Arce, Ing.Agronomo
                 </p>
         </footer>
         </div>
